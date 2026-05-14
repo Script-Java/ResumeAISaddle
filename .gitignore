@@ -28,8 +28,9 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-# uv.lock should be committed for reproducible installs — do NOT ignore it
-# uv.lock
+# uv.lock is omitted so Vercel uses pip install -r requirements.txt (Python 3.12
+# vs 3.13 lockfile mismatch causes build failures). Regenerate locally with `uv lock` if needed.
+uv.lock
 
 # SQLite databases
 *.sqlite3
