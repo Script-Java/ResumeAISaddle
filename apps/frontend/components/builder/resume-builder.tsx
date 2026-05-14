@@ -453,7 +453,7 @@ const ResumeBuilderContent = () => {
 
       // Try to extract print_url from backend error (Vercel serverless fallback)
       try {
-        const bodyMatch = message.match(/:\s*(\{.*\})$/s);
+        const bodyMatch = message.match(/:\s*(\{[\s\S]*\})$/);
         if (bodyMatch) {
           const body = JSON.parse(bodyMatch[1]);
           const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
@@ -521,7 +521,7 @@ const ResumeBuilderContent = () => {
 
       // Try to extract print_url from backend error (Vercel serverless fallback)
       try {
-        const bodyMatch = message.match(/:\s*(\{.*\})$/s);
+        const bodyMatch = message.match(/:\s*(\{[\s\S]*\})$/);
         if (bodyMatch) {
           const body = JSON.parse(bodyMatch[1]);
           const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
