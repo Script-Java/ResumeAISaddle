@@ -296,27 +296,41 @@ export default function DashboardPage() {
   const fillerPalette = ['bg-zinc-900/20', 'bg-zinc-800/10', 'bg-zinc-950/30', 'bg-zinc-900/10'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-zinc-950 min-h-screen" style={{
+      backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+    }}>
       {/* Configuration Warning Banner */}
       {masterResumeId && !isLlmConfigured && !statusLoading && (
-        <div className="border border-amber-500/20 bg-amber-500/5 p-4 rounded-xl mb-6 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-500/80" />
-            <div>
-              <p className="text-sm font-semibold text-amber-100">
-                {t('dashboard.llmNotConfiguredTitle')}
-              </p>
-              <p className="text-xs text-amber-200/60 mt-0.5">
-                {t('dashboard.llmNotConfiguredMessage')}
-              </p>
+        <div className="mx-4 md:mx-8 pt-6">
+          <div
+            className="flex items-center justify-between gap-4 px-5 py-4 rounded-2xl border border-amber-500/25 bg-zinc-900/80 backdrop-blur-xl shadow-lg shadow-black/30"
+            style={{ boxShadow: '0 0 0 1px rgba(245,158,11,0.1), 0 8px 24px rgba(0,0,0,0.4), 0 0 40px rgba(245,158,11,0.04) inset' }}
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="shrink-0 w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                <AlertTriangle className="w-4 h-4 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-zinc-100 leading-snug">
+                  {t('dashboard.llmNotConfiguredTitle')}
+                </p>
+                <p className="text-xs text-zinc-400 mt-0.5 leading-relaxed">
+                  {t('dashboard.llmNotConfiguredMessage')}
+                </p>
+              </div>
             </div>
+            <Link href="/settings" className="shrink-0">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 px-3 text-xs border-amber-500/25 text-amber-300 bg-amber-500/8 hover:bg-amber-500/15 hover:border-amber-500/40 hover:text-amber-200 rounded-xl transition-all"
+              >
+                <Settings className="w-3.5 h-3.5 mr-1.5" />
+                {t('nav.settings')}
+              </Button>
+            </Link>
           </div>
-          <Link href="/settings">
-            <Button variant="outline" size="sm" className="border-amber-500/20 text-amber-200 bg-transparent hover:bg-amber-500/10 rounded-lg">
-              <Settings className="w-4 h-4 mr-2" />
-              {t('nav.settings')}
-            </Button>
-          </Link>
         </div>
       )}
 
