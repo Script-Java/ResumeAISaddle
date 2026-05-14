@@ -5,11 +5,27 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslations } from '@/lib/i18n';
 import { User, Settings, LogOut } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 
 export const BentoGrid = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslations();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  // Fetch the real user email from Supabase on mount
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getSession().then(({ data }) => {
+      const email = data.session?.user?.email ?? null;
+      setUserEmail(email);
+    });
+    // Keep in sync if session changes (e.g., logout from another tab)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user?.email ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -73,7 +89,9 @@ export const BentoGrid = ({ children }: { children: React.ReactNode }) => {
                 <div className="absolute right-0 mt-3 w-56 bg-zinc-900 border border-white/10 shadow-2xl shadow-black/50 rounded-2xl overflow-hidden z-50 py-2">
                   <div className="px-4 py-3 border-b border-white/5 mb-2">
                     <p className="text-sm font-medium text-zinc-200">User Profile</p>
-                    <p className="text-xs text-zinc-500 truncate">user@example.com</p>
+                    <p className="text-xs text-zinc-500 truncate">
+                      {userEmail ?? '—'}
+                    </p>
                   </div>
                   
                   <Link
