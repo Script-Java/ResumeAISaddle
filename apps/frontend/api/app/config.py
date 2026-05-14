@@ -124,8 +124,6 @@ class Settings(BaseSettings):
     )
 
     # LLM Configuration
-    # Defaults to Ollama (free, local) so the app works without any paid API keys.
-    # Users can configure any provider (OpenAI, Anthropic, etc.) via the Settings UI.
     llm_provider: Literal[
         "openai",
         "openai_compatible",
@@ -134,18 +132,18 @@ class Settings(BaseSettings):
         "gemini",
         "deepseek",
         "ollama",
-    ] = "ollama"
-    llm_model: str = "llama3.2"
+    ] = "openai"
+    llm_model: str = "gpt-4o-mini"
     llm_api_key: str = ""
-    llm_api_base: str | None = "http://localhost:11434"  # Ollama default endpoint
+    llm_api_base: str | None = None
     log_llm: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "WARNING"
 
     @field_validator("llm_provider", mode="before")
     @classmethod
     def set_default_provider(cls, v: Any) -> str:
-        """Handle empty string provider by defaulting to ollama."""
+        """Handle empty string provider by defaulting to openai."""
         if not v or (isinstance(v, str) and not v.strip()):
-            return "ollama"
+            return "openai"
         return v
 
     @field_validator("log_llm", mode="before")

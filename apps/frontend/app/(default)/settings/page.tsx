@@ -106,7 +106,7 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   // LLM Config state
-  const [provider, setProvider] = useState<LLMProvider>('ollama');
+  const [provider, setProvider] = useState<LLMProvider>('openai');
   const [model, setModel] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [apiBase, setApiBase] = useState('');
@@ -275,10 +275,10 @@ export default function SettingsPage() {
         if (cancelled) return;
 
         if (llmConfig) {
-          const providerFromBackend = llmConfig.provider || 'ollama';
+          const providerFromBackend = llmConfig.provider || 'openai';
           const safeProvider = PROVIDERS.includes(providerFromBackend as LLMProvider)
             ? (providerFromBackend as LLMProvider)
-            : 'ollama';
+            : 'openai';
           setProvider(safeProvider);
           setModel(llmConfig.model || PROVIDER_INFO[safeProvider].defaultModel);
           const isMaskedKey = Boolean(llmConfig.api_key) && llmConfig.api_key.includes('*');
@@ -512,8 +512,8 @@ export default function SettingsPage() {
       // Refetch full LLM config to ensure local state is synced with backend
       const llmConfig = await fetchLlmConfig().catch(() => null);
       if (llmConfig) {
-        setProvider(llmConfig.provider || 'ollama');
-        setModel(llmConfig.model || PROVIDER_INFO['ollama'].defaultModel);
+        setProvider(llmConfig.provider || 'openai');
+        setModel(llmConfig.model || PROVIDER_INFO['openai'].defaultModel);
         const isMaskedKey = Boolean(llmConfig.api_key) && llmConfig.api_key.includes('*');
         setHasStoredApiKey(Boolean(llmConfig.api_key));
         setApiKey(isMaskedKey ? '' : llmConfig.api_key || '');
