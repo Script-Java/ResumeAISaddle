@@ -728,6 +728,7 @@
     "deleteFailedTitle": "Delete Failed",
     "errors": {
       "processingFailed": "We couldn't read your resume. Retry processing, or delete it and upload a different file.",
+      "processingFailedLLM": "Resume processing failed. Make sure you have configured an LLM provider in Settings, then try again.",
       "stillProcessing": "Your resume is still being processed. Wait a few seconds and refresh the page.",
       "notProcessedYet": "Resume has not been processed yet. Please use the Tailor feature to generate a structured resume.",
       "noDataAvailable": "No resume data available.",

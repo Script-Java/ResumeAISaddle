@@ -727,7 +727,7 @@
     "deletedDescriptionRegular": "履歴書はシステムから完全に削除されました。",
     "deleteFailedTitle": "削除に失敗しました",
     "errors": {
-      "processingFailed": "履歴書を読み取れませんでした。再処理するか、削除して別のファイルをアップロードしてください。",
+      "processingFailed": "履歴書を読み取れませんでした。再処理するか、削除して別のファイルをアップロードしてください。","processingFailedLLM": "Resume processing failed. Configure an LLM provider in Settings and try again.",
       "stillProcessing": "履歴書はまだ処理中です。数秒待ってからページを更新してください。",
       "notProcessedYet": "履歴書はまだ処理されていません。カスタマイズ機能で構造化履歴書を生成してください。",
       "noDataAvailable": "利用可能な履歴書データがありません。",
@@ -862,3 +862,4 @@
     "resetDatabaseDescription": "すべての履歴書、求人内容、生成されたドキュメントが完全に削除されます。"
   }
 }
+

@@ -727,7 +727,7 @@
     "deletedDescriptionRegular": "该简历已从系统中永久删除。",
     "deleteFailedTitle": "删除失败",
     "errors": {
-      "processingFailed": "我们无法读取您的简历。请重试处理，或删除后上传其他文件。",
+      "processingFailed": "我们无法读取您的简历。请重试处理，或删除后上传其他文件。","processingFailedLLM": "Resume processing failed. Configure an LLM provider in Settings and try again.",
       "stillProcessing": "您的简历仍在处理中。请等待几秒后刷新页面。",
       "notProcessedYet": "简历尚未处理。请使用定制功能生成结构化简历。",
       "noDataAvailable": "没有可用的简历数据。",
@@ -862,3 +862,4 @@
     "resetDatabaseDescription": "这将永久删除每一份简历、职位描述和生成的文档。"
   }
 }
+

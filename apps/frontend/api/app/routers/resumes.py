@@ -1535,7 +1535,7 @@ async def retry_processing(resume_id: str) -> ResumeUploadResponse:
             is_master=resume.get("is_master", False),
         )
     except Exception as e:
-        logger.warning(f"Retry processing failed for resume {resume_id}: {e}")
+        logger.warning("RETRY: LLM parse failed for resume %s: %s: %s", resume_id, type(e).__name__, e)
         db.update_resume(resume_id, {"processing_status": "failed"})
         return ResumeUploadResponse(
             message="Retry processing failed",

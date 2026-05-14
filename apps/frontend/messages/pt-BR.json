@@ -727,7 +727,7 @@
     "deletedDescriptionRegular": "O currículo foi permanentemente excluído do sistema.",
     "deleteFailedTitle": "Falha ao Excluir",
     "errors": {
-      "processingFailed": "Não conseguimos ler seu currículo. Tente processar novamente, ou exclua e envie outro arquivo.",
+      "processingFailed": "Não conseguimos ler seu currículo. Tente processar novamente, ou exclua e envie outro arquivo.","processingFailedLLM": "Resume processing failed. Configure an LLM provider in Settings and try again.",
       "stillProcessing": "Seu currículo ainda está sendo processado. Aguarde alguns segundos e atualize a página.",
       "notProcessedYet": "O currículo ainda não foi processado. Por favor, use o recurso de Personalização para gerar um currículo estruturado.",
       "noDataAvailable": "Nenhum dado de currículo disponível.",
@@ -862,3 +862,4 @@
     "resetDatabaseDescription": "Isso excluirá permanentemente cada currículo, descrição de vaga e documento gerado."
   }
 }
+

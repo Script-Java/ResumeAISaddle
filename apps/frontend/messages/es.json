@@ -727,7 +727,7 @@
     "deletedDescriptionRegular": "El currículum se ha eliminado permanentemente del sistema.",
     "deleteFailedTitle": "Error al eliminar",
     "errors": {
-      "processingFailed": "No pudimos leer tu currículum. Reintenta el procesamiento, o elimínalo y sube otro archivo.",
+      "processingFailed": "No pudimos leer tu currículum. Reintenta el procesamiento, o elimínalo y sube otro archivo.","processingFailedLLM": "Resume processing failed. Configure an LLM provider in Settings and try again.",
       "stillProcessing": "Tu currículum todavía se está procesando. Espera unos segundos y actualiza la página.",
       "notProcessedYet": "El currículum aún no se ha procesado. Usa la función de personalización para generar un currículum estructurado.",
       "noDataAvailable": "No hay datos de currículum disponibles.",
@@ -862,3 +862,4 @@
     "resetDatabaseDescription": "Esto eliminará permanentemente cada currículum, descripción de trabajo y documento generado."
   }
 }
+

@@ -128,11 +128,11 @@ export default function ResumeViewerPage() {
         window.location.reload();
       } else {
         console.warn('[ResumeViewer] retry returned unexpected status:', result.processing_status);
-        setError(t('resumeViewer.errors.processingFailed'));
+        setError(t('resumeViewer.errors.processingFailedLLM'));
       }
     } catch (err) {
       console.error('[ResumeViewer] retry processing failed:', err);
-      setError(t('resumeViewer.errors.processingFailed'));
+      setError(t('resumeViewer.errors.processingFailedLLM'));
     } finally {
       setIsRetrying(false);
     }
@@ -208,7 +208,9 @@ export default function ResumeViewerPage() {
   const handleDeleteResume = async () => {
     try {
       setDeleteError(null);
+      console.log('[ResumeViewer] deleting resume:', resumeId);
       await deleteResume(resumeId);
+      console.log('[ResumeViewer] delete succeeded');
       // Update cached counters
       decrementResumes();
       if (isMasterResume) {
@@ -218,7 +220,7 @@ export default function ResumeViewerPage() {
       setShowDeleteDialog(false);
       setShowDeleteSuccessDialog(true);
     } catch (err) {
-      console.error('Failed to delete resume:', err);
+      console.error('[ResumeViewer] delete failed:', err);
       setDeleteError(t('resumeViewer.errors.failedToDelete'));
       setShowDeleteDialog(false);
     }
