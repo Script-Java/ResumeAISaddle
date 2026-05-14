@@ -64,6 +64,14 @@ export default function ResumeViewerPage() {
 
         // Get processing status
         const status = (data.raw_resume?.processing_status || 'pending') as ProcessingStatus;
+        console.log('[ResumeViewer] loaded resume:', {
+          resumeId,
+          status,
+          hasProcessedResume: !!data.processed_resume,
+          hasRawContent: !!data.raw_resume?.content,
+          contentType: data.raw_resume?.content_type,
+          contentPreview: data.raw_resume?.content?.slice(0, 100),
+        });
         setProcessingStatus(status);
 
         // Capture title for editable display (always set to clear stale state)
@@ -71,23 +79,29 @@ export default function ResumeViewerPage() {
 
         // Prioritize processed_resume if available (structured JSON)
         if (data.processed_resume) {
+          console.log('[ResumeViewer] using processed_resume (structured JSON)');
           setResumeData(data.processed_resume as ResumeData);
           setError(null);
         } else if (status === 'processing') {
+          console.log('[ResumeViewer] status=processing, showing spinner');
           setError(t('resumeViewer.errors.stillProcessing'));
         } else if (data.raw_resume?.content) {
           // Try to parse raw_resume content as JSON (for tailored resumes stored as JSON)
           try {
             const parsed = JSON.parse(data.raw_resume.content);
+            console.log('[ResumeViewer] raw content parsed as JSON, setting resume data');
             setResumeData(parsed as ResumeData);
           } catch {
             // Markdown content without structured data — offer reprocessing.
             // This happens when LLM parsing was skipped or failed (e.g. no
             // Ollama/API key configured at upload time).
+            console.log('[ResumeViewer] raw content is NOT JSON (markdown), showing retry');
+            console.log('[ResumeViewer] first 200 chars of content:', data.raw_resume.content.slice(0, 200));
             setProcessingStatus('failed');
             setError(t('resumeViewer.errors.processingFailed'));
           }
         } else {
+          console.log('[ResumeViewer] no processed_resume and no raw content');
           setError(t('resumeViewer.errors.noDataAvailable'));
         }
       } catch (err) {
@@ -104,17 +118,20 @@ export default function ResumeViewerPage() {
 
   const handleRetryProcessing = async () => {
     if (!resumeId) return;
+    console.log('[ResumeViewer] retryProcessing clicked for resume:', resumeId);
     setIsRetrying(true);
     try {
       const result = await retryProcessing(resumeId);
+      console.log('[ResumeViewer] retry result:', result);
       if (result.processing_status === 'ready') {
-        // Reload the page to show the processed resume
+        console.log('[ResumeViewer] retry succeeded, reloading');
         window.location.reload();
       } else {
+        console.warn('[ResumeViewer] retry returned unexpected status:', result.processing_status);
         setError(t('resumeViewer.errors.processingFailed'));
       }
     } catch (err) {
-      console.error('Retry processing failed:', err);
+      console.error('[ResumeViewer] retry processing failed:', err);
       setError(t('resumeViewer.errors.processingFailed'));
     } finally {
       setIsRetrying(false);

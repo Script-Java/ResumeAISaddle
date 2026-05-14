@@ -524,8 +524,14 @@ async def upload_resume(file: UploadFile = File(...)) -> ResumeUploadResponse:
     Converts the file to Markdown and stores it in the database.
     Optionally parses to structured JSON if LLM is configured.
     """
+    logger.info(
+        "UPLOAD: file=%s type=%s size=%d",
+        file.filename, file.content_type, file.size or 0,
+    )
+
     # Validate file type
     if file.content_type not in ALLOWED_TYPES:
+        logger.warning("UPLOAD: rejected file type: %s", file.content_type)
         raise HTTPException(
             status_code=400,
             detail=f"Invalid file type: {file.content_type}. Allowed: PDF, DOC, DOCX",
@@ -533,20 +539,24 @@ async def upload_resume(file: UploadFile = File(...)) -> ResumeUploadResponse:
 
     # Read and validate size
     content = await file.read()
+    logger.info("UPLOAD: read %d bytes from %s", len(content), file.filename)
     if len(content) > MAX_FILE_SIZE:
+        logger.warning("UPLOAD: file too large: %d bytes", len(content))
         raise HTTPException(
             status_code=413,
             detail=f"File too large. Maximum size: {MAX_FILE_SIZE // (1024 * 1024)}MB",
         )
 
     if len(content) == 0:
+        logger.warning("UPLOAD: empty file")
         raise HTTPException(status_code=400, detail="Empty file")
 
     # Convert to markdown
     try:
         markdown_content = await parse_document(content, file.filename or "resume.pdf")
+        logger.info("UPLOAD: markdown conversion OK (%d chars)", len(markdown_content))
     except Exception as e:
-        logger.error(f"Document parsing failed: {e}")
+        logger.error(f"UPLOAD: document parsing failed: {e}")
         raise HTTPException(
             status_code=422,
             detail="Failed to parse document. Please ensure it's a valid PDF or DOCX file.",
@@ -569,11 +579,17 @@ async def upload_resume(file: UploadFile = File(...)) -> ResumeUploadResponse:
         # The resume is still usable in markdown form without structured data.
         processed_data = None
         try:
+            logger.info("UPLOAD: attempting LLM parse for %s", file.filename)
             processed_data = await parse_resume_to_json(markdown_content)
+            logger.info(
+                "UPLOAD: LLM parse succeeded — %d top-level keys",
+                len(processed_data) if processed_data else 0,
+            )
         except Exception as e:
             logger.warning(
-                "Structured JSON parsing skipped for %s (LLM may not be configured): %s",
+                "UPLOAD: LLM parse skipped for %s: %s: %s",
                 file.filename,
+                type(e).__name__,
                 e,
             )
 
@@ -581,6 +597,9 @@ async def upload_resume(file: UploadFile = File(...)) -> ResumeUploadResponse:
         if processed_data:
             update["processed_data"] = processed_data
             resume["processed_data"] = processed_data
+            logger.info("UPLOAD: saved with processed_data (ready)")
+        else:
+            logger.info("UPLOAD: saved without processed_data (ready — LLM was unavailable)")
         db.update_resume(resume["resume_id"], update)
         resume["processing_status"] = "ready"
 
@@ -1465,7 +1484,16 @@ async def retry_processing(resume_id: str) -> ResumeUploadResponse:
     """
     resume = db.get_resume(resume_id)
     if not resume:
+        logger.warning("RETRY: resume %s not found", resume_id)
         raise HTTPException(status_code=404, detail="Resume not found")
+
+    logger.info(
+        "RETRY: resume=%s status=%s has_processed=%s content_len=%d",
+        resume_id,
+        resume.get("processing_status"),
+        "yes" if resume.get("processed_data") else "no",
+        len(resume.get("content", "") or ""),
+    )
 
     # Allow retry when status is "failed", "processing", or "ready" without
     # processed_data (e.g. when LLM parsing was skipped on a prior upload).
@@ -1474,6 +1502,7 @@ async def retry_processing(resume_id: str) -> ResumeUploadResponse:
         and not resume.get("processed_data")
     )
     if not can_retry:
+        logger.warning("RETRY: resume %s already has processed data", resume_id)
         raise HTTPException(
             status_code=400,
             detail="Resume already has processed data — no retry needed.",
@@ -1481,13 +1510,16 @@ async def retry_processing(resume_id: str) -> ResumeUploadResponse:
 
     markdown_content = resume.get("content", "")
     if not markdown_content:
+        logger.warning("RETRY: resume %s has no content", resume_id)
         raise HTTPException(
             status_code=400,
             detail="Resume has no stored content to re-process.",
         )
 
     try:
+        logger.info("RETRY: attempting LLM parse for resume %s", resume_id)
         processed_data = await parse_resume_to_json(markdown_content)
+        logger.info("RETRY: LLM parse succeeded for resume %s", resume_id)
         db.update_resume(
             resume_id,
             {
