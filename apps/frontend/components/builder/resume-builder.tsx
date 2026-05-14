@@ -458,7 +458,7 @@ const ResumeBuilderContent = () => {
           const body = JSON.parse(bodyMatch[1]);
           const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
           if (detail?.print_url) {
-            openUrlInNewTab(detail.print_url);
+            window.location.href = detail.print_url;
             return;
           }
         }

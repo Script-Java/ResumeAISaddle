@@ -201,10 +201,7 @@ export default function ResumeViewerPage() {
           const body = JSON.parse(bodyMatch[1]);
           const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
           if (detail?.print_url) {
-            const didOpen = openUrlInNewTab(detail.print_url);
-            if (!didOpen) {
-              toast.error(t('common.popupBlocked', { url: detail.print_url }), { duration: 6000 });
-            }
+            window.location.href = detail.print_url;
             return;
           }
         }
