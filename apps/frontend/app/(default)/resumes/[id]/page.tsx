@@ -194,6 +194,24 @@ export default function ResumeViewerPage() {
       console.error('Failed to download resume:', err);
       const message = err instanceof Error ? err.message : String(err);
 
+      // Try to extract print_url from backend error (Vercel serverless fallback)
+      try {
+        const bodyMatch = message.match(/:\s*(\{.*\})$/s);
+        if (bodyMatch) {
+          const body = JSON.parse(bodyMatch[1]);
+          const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
+          if (detail?.print_url) {
+            const didOpen = openUrlInNewTab(detail.print_url);
+            if (!didOpen) {
+              toast.error(t('common.popupBlocked', { url: detail.print_url }), { duration: 6000 });
+            }
+            return;
+          }
+        }
+      } catch {
+        // ignore parse errors — fall through to generic error handling
+      }
+
       if (err instanceof TypeError && message.includes('Failed to fetch')) {
         // Network error: backend unreachable — open print URL directly as fallback
         const fallbackUrl = getResumePdfUrl(resumeId, undefined, uiLanguage);

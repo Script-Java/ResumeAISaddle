@@ -1809,6 +1809,9 @@ async def download_cover_letter_pdf(
         pageSize: A4 or LETTER
         lang: locale used for print page translations
     """
+    import json as _json
+    import os as _os
+
     resume = db.get_resume(resume_id)
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
@@ -1824,6 +1827,20 @@ async def download_cover_letter_pdf(
     if lang:
         url = f"{url}&lang={lang}"
 
+    # Vercel / serverless: Playwright cannot run in this environment.
+    if _os.environ.get("VERCEL"):
+        raise HTTPException(
+            status_code=503,
+            detail=_json.dumps({
+                "code": "browser_unavailable",
+                "print_url": url,
+                "message": (
+                    "PDF rendering is not available in the serverless deployment. "
+                    "Use the print page to export a PDF via your browser."
+                ),
+            }),
+        )
+
     # Render PDF with cover letter selector
     try:
         render_pdf, PDFErr = _get_pdf_renderer()
@@ -1831,7 +1848,14 @@ async def download_cover_letter_pdf(
             url, pageSize, selector=".cover-letter-print"
         )
     except PDFErr as e:
-        raise HTTPException(status_code=503, detail=str(e))
+        raise HTTPException(
+            status_code=503,
+            detail=_json.dumps({
+                "code": "browser_unavailable",
+                "print_url": url,
+                "message": str(e),
+            }),
+        )
 
     headers = {
         "Content-Disposition": f'attachment; filename="cover_letter_{resume_id}.pdf"'

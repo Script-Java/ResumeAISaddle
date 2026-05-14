@@ -449,7 +449,24 @@ const ResumeBuilderContent = () => {
       showNotification(t('builder.alerts.downloadSuccess'), 'success');
     } catch (error) {
       console.error('Failed to download resume:', error);
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      const message = error instanceof Error ? error.message : String(error);
+
+      // Try to extract print_url from backend error (Vercel serverless fallback)
+      try {
+        const bodyMatch = message.match(/:\s*(\{.*\})$/s);
+        if (bodyMatch) {
+          const body = JSON.parse(bodyMatch[1]);
+          const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
+          if (detail?.print_url) {
+            openUrlInNewTab(detail.print_url);
+            return;
+          }
+        }
+      } catch {
+        // ignore parse errors — fall through to generic error handling
+      }
+
+      if (error instanceof TypeError && message.includes('Failed to fetch')) {
         const fallbackUrl = getResumePdfUrl(resumeId, templateSettings, uiLanguage);
         const didOpen = openUrlInNewTab(fallbackUrl);
         if (!didOpen) {
@@ -500,7 +517,24 @@ const ResumeBuilderContent = () => {
       downloadBlobAsFile(blob, filename);
     } catch (error) {
       console.error('Failed to download cover letter:', error);
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      const message = error instanceof Error ? error.message : String(error);
+
+      // Try to extract print_url from backend error (Vercel serverless fallback)
+      try {
+        const bodyMatch = message.match(/:\s*(\{.*\})$/s);
+        if (bodyMatch) {
+          const body = JSON.parse(bodyMatch[1]);
+          const detail = typeof body.detail === 'string' ? JSON.parse(body.detail) : body.detail;
+          if (detail?.print_url) {
+            openUrlInNewTab(detail.print_url);
+            return;
+          }
+        }
+      } catch {
+        // ignore parse errors
+      }
+
+      if (error instanceof TypeError && message.includes('Failed to fetch')) {
         const fallbackUrl = getCoverLetterPdfUrl(resumeId, templateSettings.pageSize, uiLanguage);
         const didOpen = openUrlInNewTab(fallbackUrl);
         if (!didOpen) {
