@@ -640,6 +640,7 @@ async def check_llm_health(
             "provider": config.provider,
             "model": config.model,
             "error_code": error_code,
+            "error": message,
         }
         if include_details:
             result["test_prompt"] = _to_code_block(prompt)
