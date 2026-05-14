@@ -54,6 +54,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         codeBlock: false,
         horizontalRule: false,
         hardBreak: false,
+        // Disabled because added explicitly below with custom config
+        link: false,
+        underline: false,
       }),
       Underline,
       Link.configure({

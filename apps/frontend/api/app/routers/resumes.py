@@ -471,7 +471,7 @@ async def _generate_auxiliary_messages(
     task_labels: list[str] = []
 
     # Title generation is always on (no feature flag)
-    generation_tasks.append(generate_resume_title(job_content, language))
+    generation_tasks.append(generate_resume_title(job_content, language, improved_data))
     task_labels.append("title")
 
     if enable_cover_letter:
@@ -1420,11 +1420,15 @@ async def download_resume_pdf(
     - showContactIcons: show icons in contact info
     - lang: locale used for print page translations
     """
+    import json as _json
+    import os as _os
+
     resume = db.get_resume(resume_id)
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
 
-    # Build print URL with all settings
+    # Build print URL with all settings (used both for Playwright and for the
+    # Vercel serverless fallback that opens the page directly in the browser).
     params = (
         f"template={template}"
         f"&pageSize={pageSize}"
@@ -1445,22 +1449,44 @@ async def download_resume_pdf(
     )
     if lang:
         params = f"{params}&lang={lang}"
-    url = f"{settings.frontend_base_url}/print/resumes/{resume_id}?{params}"
+    print_page_url = f"{settings.frontend_base_url}/print/resumes/{resume_id}?{params}"
 
-    # Use the exact margins provided; compact mode only affects spacing.
+    # Vercel / serverless: Playwright cannot run in this environment.
+    # Return a structured 503 so the frontend can silently fall back to
+    # opening the print page directly (browser native Ctrl+P → Save as PDF).
+    if _os.environ.get("VERCEL"):
+        raise HTTPException(
+            status_code=503,
+            detail=_json.dumps({
+                "code": "browser_unavailable",
+                "print_url": print_page_url,
+                "message": (
+                    "PDF rendering is not available in the serverless deployment. "
+                    "Use the print page to export a PDF via your browser."
+                ),
+            }),
+        )
+
+    # Local / self-hosted: render with headless Chromium via Playwright.
     pdf_margins = {
         "top": marginTop,
         "right": marginRight,
         "bottom": marginBottom,
         "left": marginLeft,
     }
-
-    # Render PDF with margins applied to every page
     try:
         render_pdf, PDFErr = _get_pdf_renderer()
-        pdf_bytes = await render_pdf(url, pageSize, margins=pdf_margins)
+        pdf_bytes = await render_pdf(print_page_url, pageSize, margins=pdf_margins)
     except PDFErr as e:
-        raise HTTPException(status_code=503, detail=str(e))
+        # Include the print URL so the frontend can fall back gracefully.
+        raise HTTPException(
+            status_code=503,
+            detail=_json.dumps({
+                "code": "browser_unavailable",
+                "print_url": print_page_url,
+                "message": str(e),
+            }),
+        )
 
     headers = {"Content-Disposition": f'attachment; filename="resume_{resume_id}.pdf"'}
     return Response(content=pdf_bytes, media_type="application/pdf", headers=headers)

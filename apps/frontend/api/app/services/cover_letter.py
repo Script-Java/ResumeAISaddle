@@ -139,12 +139,14 @@ async def generate_outreach_message(
 async def generate_resume_title(
     job_description: str,
     language: str = "en",
+    resume_data: dict[str, Any] | None = None,
 ) -> str:
     """Generate a short descriptive title from a job description.
 
     Args:
         job_description: Target job description text
         language: Output language code (en, es, zh, ja)
+        resume_data: Optional structured resume data for company name fallback
 
     Returns:
         Generated title like "Senior Frontend Engineer @ Stripe"
@@ -165,4 +167,15 @@ async def generate_resume_title(
 
     # Strip quotes and whitespace, truncate to 80 chars
     title = result.strip().strip("\"'")
+
+    # If LLM didn't include a company, try to extract from resume experience
+    if "@" not in title and resume_data:
+        work = resume_data.get("workExperience") or resume_data.get("experience") or []
+        if isinstance(work, list) and work:
+            first = work[0]
+            if isinstance(first, dict):
+                company = first.get("company") or first.get("name") or ""
+                if company and company not in title:
+                    title = f"{title} @ {company}"
+
     return title[:80]
