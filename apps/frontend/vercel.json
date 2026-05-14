@@ -2,10 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
 
-  "functions": {
-    "api/index.py": {}
-  },
-
   "rewrites": [
     {
       "source": "/api/(.*)",

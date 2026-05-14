@@ -565,23 +565,24 @@ async def upload_resume(file: UploadFile = File(...)) -> ResumeUploadResponse:
             original_markdown=markdown_content,
         )
 
-        # Try to parse to structured JSON (optional, may fail if LLM not configured)
+        # Try to parse to structured JSON (optional, may fail if LLM not configured).
+        # The resume is still usable in markdown form without structured data.
+        processed_data = None
         try:
             processed_data = await parse_resume_to_json(markdown_content)
-            db.update_resume(
-                resume["resume_id"],
-                {
-                    "processed_data": processed_data,
-                    "processing_status": "ready",
-                },
-            )
-            resume["processed_data"] = processed_data
-            resume["processing_status"] = "ready"
         except Exception as e:
-            # LLM parsing failed, update status to failed
-            logger.warning(f"Resume parsing to JSON failed for {file.filename}: {e}")
-            db.update_resume(resume["resume_id"], {"processing_status": "failed"})
-            resume["processing_status"] = "failed"
+            logger.warning(
+                "Structured JSON parsing skipped for %s (LLM may not be configured): %s",
+                file.filename,
+                e,
+            )
+
+        update: dict[str, Any] = {"processing_status": "ready"}
+        if processed_data:
+            update["processed_data"] = processed_data
+            resume["processed_data"] = processed_data
+        db.update_resume(resume["resume_id"], update)
+        resume["processing_status"] = "ready"
 
         # Return accurate status to client (API-001 fix)
         return ResumeUploadResponse(
