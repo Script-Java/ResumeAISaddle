@@ -1,6 +1,7 @@
 """Application configuration using pydantic-settings."""
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Literal
 
@@ -204,7 +205,15 @@ class Settings(BaseSettings):
         return origins
 
     # Paths
+    # On Vercel the filesystem is read-only except /tmp, so config storage
+    # goes there. Locally it sits in api/data/ alongside the app.
     data_dir: Path = Path(__file__).parent.parent / "data"
+
+    @property
+    def _writable_dir(self) -> Path:
+        if os.environ.get("VERCEL"):
+            return Path("/tmp")
+        return self.data_dir
 
     @property
     def db_path(self) -> Path:
@@ -214,7 +223,7 @@ class Settings(BaseSettings):
     @property
     def config_path(self) -> Path:
         """Path to config storage file."""
-        return self.data_dir / "config.json"
+        return self._writable_dir / "config.json"
 
     def get_effective_api_key(self) -> str:
         """Get the effective API key with config file fallback.
