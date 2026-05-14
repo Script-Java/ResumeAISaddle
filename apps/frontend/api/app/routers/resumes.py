@@ -1467,10 +1467,16 @@ async def retry_processing(resume_id: str) -> ResumeUploadResponse:
     if not resume:
         raise HTTPException(status_code=404, detail="Resume not found")
 
-    if resume.get("processing_status") not in ("failed", "processing"):
+    # Allow retry when status is "failed", "processing", or "ready" without
+    # processed_data (e.g. when LLM parsing was skipped on a prior upload).
+    can_retry = resume.get("processing_status") in ("failed", "processing") or (
+        resume.get("processing_status") == "ready"
+        and not resume.get("processed_data")
+    )
+    if not can_retry:
         raise HTTPException(
             status_code=400,
-            detail="Only resumes with 'failed' or 'processing' status can be retried.",
+            detail="Resume already has processed data — no retry needed.",
         )
 
     markdown_content = resume.get("content", "")

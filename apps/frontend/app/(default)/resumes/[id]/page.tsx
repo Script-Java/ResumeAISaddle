@@ -73,8 +73,6 @@ export default function ResumeViewerPage() {
         if (data.processed_resume) {
           setResumeData(data.processed_resume as ResumeData);
           setError(null);
-        } else if (status === 'failed') {
-          setError(t('resumeViewer.errors.processingFailed'));
         } else if (status === 'processing') {
           setError(t('resumeViewer.errors.stillProcessing'));
         } else if (data.raw_resume?.content) {
@@ -83,7 +81,11 @@ export default function ResumeViewerPage() {
             const parsed = JSON.parse(data.raw_resume.content);
             setResumeData(parsed as ResumeData);
           } catch {
-            setError(t('resumeViewer.errors.notProcessedYet'));
+            // Markdown content without structured data — offer reprocessing.
+            // This happens when LLM parsing was skipped or failed (e.g. no
+            // Ollama/API key configured at upload time).
+            setProcessingStatus('failed');
+            setError(t('resumeViewer.errors.processingFailed'));
           }
         } else {
           setError(t('resumeViewer.errors.noDataAvailable'));
