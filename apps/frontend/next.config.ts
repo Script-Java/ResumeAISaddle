@@ -7,7 +7,7 @@ const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN || 'http://127.0.0.1:8000';
 const IS_VERCEL = Boolean(process.env.VERCEL);
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  output: IS_VERCEL ? undefined : 'standalone',
   experimental: {
     proxyTimeout: 240_000,
     // Tree-shake barrel imports — saves ~200-800ms cold start per route
