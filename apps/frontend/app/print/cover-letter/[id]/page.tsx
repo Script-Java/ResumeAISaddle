@@ -5,7 +5,6 @@
  * Uses the same API fetch pattern as the resume print page.
  */
 
-import { API_BASE } from '@/lib/api/client';
 import { translate } from '@/lib/i18n/server';
 import { resolveLocale } from '@/lib/i18n/locale';
 
@@ -46,7 +45,7 @@ async function fetchCoverLetterData(resumeId: string): Promise<CoverLetterData> 
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token || '';
 
-  const res = await fetch(`${API_BASE}/resumes?resume_id=${encodeURIComponent(resumeId)}`, {
+  const res = await fetch(`/api/v1/resumes?resume_id=${encodeURIComponent(resumeId)}`, {
     cache: 'no-store',
     headers: {
       ...(token ? { 'Authorization': `Bearer ${token}` } : {})

@@ -9,7 +9,6 @@ import {
   type AccentColor,
   DEFAULT_TEMPLATE_SETTINGS,
 } from '@/lib/types/template-settings';
-import { API_BASE } from '@/lib/api/client';
 import { translate } from '@/lib/i18n/server';
 import { resolveLocale } from '@/lib/i18n/locale';
 import { withLocalizedDefaultSections } from '@/lib/utils/section-helpers';
@@ -85,7 +84,7 @@ async function fetchResumeData(id: string): Promise<ResumeData> {
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token || '';
 
-  const res = await fetch(`${API_BASE}/resumes?resume_id=${encodeURIComponent(id)}`, {
+  const res = await fetch(`/api/v1/resumes?resume_id=${encodeURIComponent(id)}`, {
     cache: 'no-store',
     headers: {
       ...(token ? { 'Authorization': `Bearer ${token}` } : {})
