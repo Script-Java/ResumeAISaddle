@@ -10,7 +10,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 # Path to config file for API key persistence
-CONFIG_FILE_PATH = Path(__file__).parent.parent / "data" / "config.json"
+# On Vercel the filesystem is read-only except /tmp, so use that.
+_DATA_DIR = Path("/tmp") if os.environ.get("VERCEL") else Path(__file__).parent.parent / "data"
+CONFIG_FILE_PATH = _DATA_DIR / "config.json"
 ALLOWED_LOG_LEVELS = ("CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG")
 
 
