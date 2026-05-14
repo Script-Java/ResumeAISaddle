@@ -50,7 +50,11 @@ def _get_config_path() -> Path:
 
 
 def _load_config() -> dict:
-    """Load config from file."""
+    """Load config — tries Supabase first, then file-based fallback."""
+    # On Vercel, prefer persistent Supabase storage over /tmp (ephemeral).
+    supabase_cfg = db.load_config()
+    if supabase_cfg:
+        return supabase_cfg
     path = _get_config_path()
     if path.exists():
         return json.loads(path.read_text())
@@ -58,10 +62,14 @@ def _load_config() -> dict:
 
 
 def _save_config(config: dict) -> None:
-    """Save config to file and invalidate the resume router's cache."""
-    path = _get_config_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(config, indent=2))
+    """Save config — tries Supabase first, then file-based fallback."""
+    # Persist to Supabase so config survives cold starts on Vercel.
+    saved = db.save_config(config)
+    if not saved:
+        # Fall back to file for local dev or when Supabase table doesn't exist.
+        path = _get_config_path()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(config, indent=2))
     invalidate_config_cache()
 
 

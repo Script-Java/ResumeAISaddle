@@ -264,6 +264,43 @@ class Database:
         result = self.client.table("improvements").select("*").execute()
         return result.data
 
+    # Config storage — persists LLM provider, model, and API key across
+    # cold starts on Vercel (where /tmp is ephemeral). Requires a `config`
+    # table in Supabase (see SETUP.md for DDL).
+    def save_config(self, config_data: dict[str, Any]) -> bool:
+        """Save LLM config to Supabase.
+
+        Upserts a single row keyed by user_id. Returns True on success.
+        """
+        try:
+            uid = self.user_id
+            if not uid:
+                logger.warning("save_config: no user_id — cannot persist")
+                return False
+            row = {"user_id": uid, "config": config_data, "updated_at": datetime.now(timezone.utc).isoformat()}
+            self.client.table("config").upsert(row, on_conflict="user_id").execute()
+            return True
+        except Exception as e:
+            logger.warning("save_config failed: %s", e)
+            return False
+
+    def load_config(self) -> dict[str, Any]:
+        """Load LLM config from Supabase.
+
+        Returns empty dict if no config found or table doesn't exist.
+        """
+        try:
+            uid = self.user_id
+            if not uid:
+                return {}
+            result = self.client.table("config").select("config").eq("user_id", uid).execute()
+            if result.data:
+                return result.data[0].get("config", {})
+            return {}
+        except Exception as e:
+            logger.warning("load_config failed: %s", e)
+            return {}
+
     def reset_database(self) -> None:
         """Delete all data from all tables."""
         # Supabase/PostgREST requires a filter for delete operations.

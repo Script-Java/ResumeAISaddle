@@ -623,6 +623,12 @@ async def check_llm_health(
             error_code = "not_found_404"
         elif "<!doctype html" in message.lower() or "<html" in message.lower():
             error_code = "html_response"
+        elif "does not support image" in message or "image.png" in message:
+            error_code = "model_not_found"
+            message = (
+                f"Connection failed — check that model '{config.model}' is valid "
+                f"for provider '{config.provider}' and the API key is correct."
+            )
         result = {
             "healthy": False,
             "provider": config.provider,
