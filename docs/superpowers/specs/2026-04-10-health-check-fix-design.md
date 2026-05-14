@@ -1,7 +1,7 @@
 # Health Check Fix — Stop LLM Calls on Docker Liveness Probe
 
 **Date:** 2026-04-10
-**Issue:** [#746](https://github.com/srbhr/Resume-Matcher/issues/746)
+**Issue:** [#746](https://github.com/srbhr/Recro-AI/issues/746)
 **Approach:** A (Minimal)
 
 ## Problem

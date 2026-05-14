@@ -603,11 +603,11 @@ const ResumeBuilderContent = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-background flex justify-center items-center p-4 md:p-8">
+    <div className="h-screen w-full bg-zinc-950 flex justify-center items-center p-4 md:p-8">
       {/* Main Container */}
-      <div className="w-full h-full max-w-[90%] md:max-w-[95%] xl:max-w-[1800px] border border-black bg-background shadow-sw-lg flex flex-col">
+      <div className="w-full h-full max-w-[90%] md:max-w-[95%] xl:max-w-[1800px] border border-white/10 bg-zinc-900/50 backdrop-blur-xl shadow-2xl shadow-black/50 rounded-3xl overflow-hidden flex flex-col">
         {/* Header Section */}
-        <div className="border-b border-black p-6 md:p-8 bg-background no-print">
+        <div className="border-b border-white/5 p-6 md:p-8 bg-zinc-900/50 no-print">
           {/* Top Row: Back button and Actions */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div>
@@ -619,16 +619,16 @@ const ResumeBuilderContent = () => {
                 <ArrowLeft className="w-4 h-4" />
                 {t('nav.backToDashboard')}
               </Button>
-              <h1 className="font-serif text-3xl md:text-5xl text-black tracking-tight leading-[0.95] uppercase">
+              <h1 className="text-3xl md:text-5xl text-zinc-100 font-semibold tracking-tight leading-[0.95] uppercase">
                 {t('nav.builder')}
               </h1>
               <div className="mt-3 flex items-center gap-3">
-                <p className="text-sm font-mono text-blue-700 uppercase tracking-wide font-bold">
+                <p className="text-sm font-mono text-emerald-500 uppercase tracking-wide font-bold">
                   {'// '}
                   {resumeId ? t('builder.editMode') : t('builder.createAndPreview')}
                 </p>
                 {hasUnsavedChanges && (
-                  <span className="flex items-center gap-1 text-xs font-mono text-amber-600 bg-amber-50 px-2 py-1 border border-amber-200">
+                  <span className="flex items-center gap-1 text-xs font-mono text-amber-400 bg-amber-950/30 px-2 py-1 border border-amber-900/50 rounded-md">
                     <AlertTriangle className="w-3 h-3" />
                     {t('builder.unsavedDraft')}
                   </span>
@@ -738,13 +738,13 @@ const ResumeBuilderContent = () => {
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 bg-black gap-[1px] flex-1 min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[1px] flex-1 min-h-0 bg-white/5">
           {/* Left Panel: Editor */}
-          <div className="bg-background p-6 md:p-8 overflow-y-auto no-print">
+          <div className="bg-zinc-900/50 p-6 md:p-8 overflow-y-auto no-print">
             <div className="max-w-3xl mx-auto space-y-6">
-              <div className="flex items-center gap-2 border-b-2 border-black pb-2">
-                <div className="w-3 h-3 bg-blue-700"></div>
-                <h2 className="font-mono text-lg font-bold uppercase tracking-wider">
+              <div className="flex items-center gap-2 border-b border-white/10 pb-2">
+                <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                <h2 className="font-mono text-lg font-bold uppercase tracking-wider text-zinc-100">
                   {activeTab === 'resume' && t('builder.leftPanel.editorPanel')}
                   {activeTab === 'cover-letter' && t('builder.leftPanel.coverLetterEditor')}
                   {activeTab === 'outreach' && t('builder.leftPanel.outreachEditor')}
@@ -848,9 +848,9 @@ const ResumeBuilderContent = () => {
           </div>
 
           {/* Right Panel: Preview with Tabs */}
-          <div className="bg-secondary overflow-hidden flex flex-col no-print">
+          <div className="bg-zinc-950/50 overflow-hidden flex flex-col no-print">
             {/* Tabs Header */}
-            <div className="px-6 pt-3 shrink-0 bg-secondary">
+            <div className="px-6 pt-3 shrink-0 bg-zinc-900/30 border-b border-white/5">
               <RetroTabs
                 tabs={[
                   { id: 'resume', label: t('builder.previewTabs.resume') },
@@ -928,29 +928,29 @@ const ResumeBuilderContent = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-background flex justify-between items-center font-mono text-xs text-blue-700 border-t border-black no-print">
-          <span className="uppercase font-bold flex items-center gap-2">
+        <div className="p-4 bg-zinc-900/50 flex justify-between items-center font-mono text-xs text-zinc-400 border-t border-white/5 no-print">
+          <span className="uppercase font-bold flex items-center gap-2 text-zinc-300">
             <Image
-              src="/logo.svg"
-              alt="Resume Matcher"
+              src="/logo.png"
+              alt="Recro AI"
               width={20}
               height={20}
-              className="w-5 h-5"
+              className="w-5 h-5 opacity-90"
             />
             {t('builder.footer.moduleLabel')}
           </span>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-700"></div>
-              <span className="uppercase">
+              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <span className="uppercase text-zinc-300">
                 {templateSettings.template === 'swiss-single' ||
                 templateSettings.template === 'modern'
                   ? t('builder.footer.singleColumn')
                   : t('builder.footer.twoColumn')}
               </span>
             </div>
-            <span className="text-steel-grey">|</span>
-            <span className="uppercase">
+            <span className="text-zinc-600">|</span>
+            <span className="uppercase text-zinc-300">
               {templateSettings.pageSize === 'A4' ? 'A4' : t('builder.pageSize.usLetter')}
             </span>
           </div>

@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next';
 
+// Local dev only — on Vercel, vercel.json routes /api/* to the Python
+// serverless function directly. Setting the rewrite here on Vercel would
+// conflict and attempt to proxy to a localhost that doesn't exist.
 const BACKEND_ORIGIN = process.env.BACKEND_ORIGIN || 'http://127.0.0.1:8000';
+const IS_VERCEL = Boolean(process.env.VERCEL);
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -19,8 +23,9 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    // Note: Next.js serves filesystem routes (app/api/) before rewrites.
-    // Do not create app/api/ routes or they will shadow the backend proxy.
+    // On Vercel: no rewrites — vercel.json handles /api/* → Python function.
+    // Locally: proxy /api/* to the FastAPI dev server on port 8000.
+    if (IS_VERCEL) return [];
     return [
       {
         source: '/api/:path*',

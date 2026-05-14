@@ -81,34 +81,34 @@ export const RegenerateInstructionDialog: React.FC<RegenerateInstructionDialogPr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] p-0 gap-0 rounded-none">
-        <DialogHeader className="p-6 pb-4 border-b border-black">
-          <DialogTitle className="font-serif text-xl font-bold uppercase tracking-tight">
+      <DialogContent className="sm:max-w-[600px] p-0 gap-0 rounded-3xl bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden">
+        <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-zinc-900/50">
+          <DialogTitle className="text-xl font-semibold tracking-tight text-zinc-100">
             {t('builder.regenerate.instructionDialog.title')}
           </DialogTitle>
-          <DialogDescription className="font-mono text-xs text-ink-soft mt-2">
+          <DialogDescription className="font-mono text-xs text-zinc-400 mt-2">
             {t('builder.regenerate.instructionDialog.subtitle')}
           </DialogDescription>
         </DialogHeader>
 
         <div className="p-6 space-y-6">
           {error ? (
-            <div className="border border-red-600 bg-red-50 px-4 py-3">
-              <p className="font-mono text-xs text-red-700">{resolveErrorMessage(error)}</p>
+            <div className="border border-red-500/30 bg-red-500/10 px-4 py-3 rounded-xl">
+              <p className="font-mono text-xs text-red-400">{resolveErrorMessage(error)}</p>
             </div>
           ) : null}
           {/* Selected Items Summary */}
           <div className="space-y-2">
-            <label className="font-mono text-xs uppercase tracking-wider text-steel-grey">
+            <label className="font-mono text-xs uppercase tracking-wider text-zinc-400">
               {t('builder.regenerate.instructionDialog.selectedItems')}
             </label>
-            <div className="bg-paper-tint border border-steel-grey p-3 space-y-2 max-h-32 overflow-y-auto">
+            <div className="bg-zinc-950 border border-white/10 rounded-xl p-3 space-y-2 max-h-32 overflow-y-auto">
               {selectedItems.map((item) => (
                 <div key={item.item_id} className="flex items-center gap-2 text-sm">
-                  <span className="text-steel-grey">{getItemIcon(item.item_type)}</span>
-                  <span className="font-medium truncate">{item.title}</span>
+                  <span className="text-zinc-500">{getItemIcon(item.item_type)}</span>
+                  <span className="font-medium truncate text-zinc-200">{item.title}</span>
                   {item.subtitle && (
-                    <span className="text-steel-grey text-xs truncate">| {item.subtitle}</span>
+                    <span className="text-zinc-500 text-xs truncate">| {item.subtitle}</span>
                   )}
                 </div>
               ))}
@@ -119,7 +119,7 @@ export const RegenerateInstructionDialog: React.FC<RegenerateInstructionDialogPr
           <div className="space-y-2">
             <label
               htmlFor="regenerate-instruction"
-              className="font-mono text-xs uppercase tracking-wider text-steel-grey"
+              className="font-mono text-xs uppercase tracking-wider text-zinc-400"
             >
               {t('builder.regenerate.instructionDialog.hint')}
             </label>
@@ -130,23 +130,23 @@ export const RegenerateInstructionDialog: React.FC<RegenerateInstructionDialogPr
               onKeyDown={handleKeyDown}
               maxLength={2000}
               placeholder={t('builder.regenerate.instructionDialog.placeholder')}
-              className="min-h-[120px] border-black"
+              className="min-h-[120px] rounded-xl border-white/10 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus-visible:ring-emerald-500"
               disabled={isGenerating}
             />
           </div>
         </div>
 
-        <DialogFooter className="p-4 bg-secondary border-t border-black flex-row justify-between gap-3">
+        <DialogFooter className="p-4 bg-zinc-900/50 border-t border-white/5 flex-row justify-between gap-3">
           <Button
             variant="outline"
             onClick={onBack}
             disabled={isGenerating}
-            className="rounded-none border-black"
+            className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100 gap-2"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
+            <ArrowLeft className="w-4 h-4" />
             {t('builder.regenerate.instructionDialog.backButton')}
           </Button>
-          <Button onClick={onGenerate} disabled={isGenerating} className="rounded-none">
+          <Button onClick={onGenerate} disabled={isGenerating} className="rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black gap-2">
             {isGenerating ? (
               <>
                 <Sparkles className="w-4 h-4 animate-spin" />

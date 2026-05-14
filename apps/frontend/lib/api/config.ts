@@ -156,7 +156,7 @@ export const PROVIDER_INFO: Record<
   },
   gemini: { name: 'Google Gemini', defaultModel: 'gemini-3-flash-preview', requiresKey: true },
   deepseek: { name: 'DeepSeek', defaultModel: 'deepseek-chat', requiresKey: true },
-  ollama: { name: 'Ollama (Local)', defaultModel: 'gemma3:4b', requiresKey: false },
+  ollama: { name: 'Ollama (Local)', defaultModel: 'llama3.2', requiresKey: false },
 };
 
 // Feature configuration types

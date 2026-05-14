@@ -112,7 +112,7 @@ cleanup() {
     trap '' SIGTERM SIGINT SIGQUIT
 
     echo "" >&2
-    info "Shutting down Resume Matcher..."
+    info "Shutting down Recro AI..."
 
     # Kill frontend if running
     if [ -n "$FRONTEND_PID" ] && kill -0 "$FRONTEND_PID" 2>/dev/null; then

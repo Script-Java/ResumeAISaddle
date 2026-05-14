@@ -46,22 +46,20 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'default', size = 'default', ...props }, ref) => {
     // Base styles applied to ALL buttons
-    // Swiss Design: clean, functional, high contrast
     const baseStyles = cn(
       // Layout & Typography
       'relative inline-flex items-center justify-center gap-2',
-      'whitespace-nowrap text-sm font-medium font-mono uppercase tracking-wide',
-      // Transitions — only the properties that actually change on hover/active.
-      // Avoids the perf footgun of `transition-all` and matches Swiss "snap" feel.
-      'transition-[transform,box-shadow,background-color] duration-100 ease-out',
-      // Focus state - sharp blue ring (not soft glow)
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2',
+      'whitespace-nowrap text-sm font-semibold tracking-wide',
+      // Transitions
+      'transition-all duration-200 ease-out',
+      // Focus state
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950',
       // Disabled state
       'disabled:pointer-events-none disabled:opacity-50',
       // SVG icon sizing
       "[&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0",
-      // Swiss Design: NO rounded corners
-      'rounded-none'
+      // Bento Design: Rounded corners
+      'rounded-xl'
     );
 
     // Hit-area expansion for icon-only buttons. Many call sites override
@@ -76,88 +74,65 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Variant styles - each has distinct purpose and color
     const variants = {
-      // PRIMARY - Hyper Blue (#1D4ED8 / blue-700)
-      // Use for: Save, Submit, Create, Primary CTA
+      // PRIMARY
       default: cn(
-        'bg-blue-700 text-white',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-blue-800',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-zinc-100 text-zinc-900',
+        'shadow-[0_0_15px_rgba(255,255,255,0.1)]',
+        'hover:bg-white',
+        'active:scale-[0.98]'
       ),
 
-      // DESTRUCTIVE - Alert Red (#DC2626 / red-600)
-      // Use for: Delete, Remove, Destroy, Dangerous actions
+      // DESTRUCTIVE
       destructive: cn(
-        'bg-red-600 text-white',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-red-700',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-red-500/10 text-red-500',
+        'border border-red-500/20',
+        'hover:bg-red-500/20 hover:border-red-500/30',
+        'active:scale-[0.98]'
       ),
 
-      // SUCCESS - Signal Green (#15803D / green-700)
-      // Use for: Download, Confirm, Complete, Positive actions
+      // SUCCESS
       success: cn(
-        'bg-green-700 text-white',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-green-800',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-emerald-500/10 text-emerald-500',
+        'border border-emerald-500/20',
+        'hover:bg-emerald-500/20 hover:border-emerald-500/30',
+        'active:scale-[0.98]'
       ),
 
-      // WARNING - Alert Orange (#F97316 / orange-500)
-      // Use for: Reset, Clear, Undo, Caution actions
+      // WARNING
       warning: cn(
-        'bg-orange-500 text-white',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-orange-600',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-amber-500/10 text-amber-500',
+        'border border-amber-500/20',
+        'hover:bg-amber-500/20 hover:border-amber-500/30',
+        'active:scale-[0.98]'
       ),
 
-      // OUTLINE - Canvas background with black border
-      // Use for: Cancel, Back, Secondary actions, Navigation
+      // OUTLINE
       outline: cn(
-        'bg-background text-black',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-secondary',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-zinc-900/50 text-zinc-300',
+        'border border-white/10',
+        'hover:bg-zinc-800/50 hover:text-zinc-100',
+        'active:scale-[0.98]'
       ),
 
-      // SECONDARY - Panel Grey (#E5E5E0)
-      // Use for: Less prominent actions, Toolbar buttons
+      // SECONDARY
       secondary: cn(
-        'bg-secondary text-black',
-        'border border-black',
-        'shadow-sw-sm',
-        'hover:bg-[#D8D8D2]',
-        'hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none',
-        'active:translate-y-[2px] active:translate-x-[2px]'
+        'bg-zinc-800 text-zinc-200',
+        'hover:bg-zinc-700 hover:text-zinc-100',
+        'active:scale-[0.98]'
       ),
 
-      // GHOST - No background, minimal styling
-      // Use for: Icon buttons, Subtle navigation, Toolbars
+      // GHOST
       ghost: cn(
-        'bg-transparent text-black',
-        'border-none shadow-none',
-        'hover:bg-paper-tint',
-        'active:bg-paper-tint'
+        'bg-transparent text-zinc-400',
+        'hover:bg-zinc-800/50 hover:text-zinc-200',
+        'active:scale-[0.98]'
       ),
 
-      // LINK - Text only with underline
-      // Use for: Inline links, Text navigation
+      // LINK
       link: cn(
-        'bg-transparent text-blue-700',
-        'border-none shadow-none',
-        'underline-offset-4 hover:underline',
-        'p-0 h-auto'
+        'bg-transparent text-zinc-400',
+        'hover:text-zinc-200 hover:underline underline-offset-4',
+        'p-0 h-auto rounded-none'
       ),
     };
 

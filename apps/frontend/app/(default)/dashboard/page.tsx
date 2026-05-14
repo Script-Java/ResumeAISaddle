@@ -1,6 +1,6 @@
 'use client';
 
-import { SwissGrid } from '@/components/home/swiss-grid';
+import { BentoGrid } from '@/components/home/bento-grid';
 import { ResumeUploadDialog } from '@/components/dashboard/resume-upload-dialog';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
@@ -265,16 +265,11 @@ export default function DashboardPage() {
       .join('');
   };
 
-  // Muted palette that complements the #F0F0E8 canvas
+  // High-end minimalist palette
   const cardPalette = [
-    { bg: '#1D4ED8', fg: '#FFFFFF' }, // Hyper Blue
-    { bg: '#15803D', fg: '#FFFFFF' }, // Signal Green
-    { bg: '#000000', fg: '#FFFFFF' }, // Ink
-    { bg: '#92400E', fg: '#FFFFFF' }, // Warm Brown
-    { bg: '#7C3AED', fg: '#FFFFFF' }, // Violet
-    { bg: '#0E7490', fg: '#FFFFFF' }, // Teal
-    { bg: '#B91C1C', fg: '#FFFFFF' }, // Deep Red
-    { bg: '#4338CA', fg: '#FFFFFF' }, // Indigo
+    { bg: 'rgba(255,255,255,0.03)', fg: '#e4e4e7', border: 'rgba(255,255,255,0.08)' },
+    { bg: 'rgba(255,255,255,0.02)', fg: '#d4d4d8', border: 'rgba(255,255,255,0.06)' },
+    { bg: 'rgba(255,255,255,0.04)', fg: '#f4f4f5', border: 'rgba(255,255,255,0.1)' },
   ];
 
   const hashTitle = (title: string): number => {
@@ -286,31 +281,38 @@ export default function DashboardPage() {
     return Math.abs(hash);
   };
 
-  const totalCards = 1 + tailoredResumes.length + 1;
-  const fillerCount = Math.max(0, (5 - (totalCards % 5)) % 5);
-  const extraFillerCount = 5;
-  // Use Tailwind classes for fillers now that we have them in config or use specific hex if needed
-  // Using the hex values from before to maintain exact look, or we could map them to variants
-  const fillerPalette = ['bg-secondary', 'bg-[#D8D8D2]', 'bg-[#CFCFC7]', 'bg-[#E0E0D8]'];
+  const tailoredSlots = tailoredResumes.reduce((acc, _, index) => {
+    return acc + (index % 3 === 0 ? 2 : 1);
+  }, 0);
+  
+  // Master is col-span-2 row-span-2 = 4 slots on md and above. Create Resume is 1 slot.
+  const totalSlots = 4 + 1 + tailoredSlots;
+  
+  // Ensure the grid is a perfect rectangle by making the total slots a multiple of 4.
+  // We also ensure a minimum of 16 slots (4 rows) to completely fill typical screens.
+  const targetSlots = Math.max(16, Math.ceil(totalSlots / 4) * 4);
+  const fillersNeeded = targetSlots - totalSlots;
+
+  const fillerPalette = ['bg-zinc-900/20', 'bg-zinc-800/10', 'bg-zinc-950/30', 'bg-zinc-900/10'];
 
   return (
     <div className="space-y-6">
       {/* Configuration Warning Banner */}
       {masterResumeId && !isLlmConfigured && !statusLoading && (
-        <div className="border-2 border-warning bg-amber-50 p-4 shadow-sw-default mb-6 flex items-center justify-between">
+        <div className="border border-amber-500/20 bg-amber-500/5 p-4 rounded-xl mb-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-warning" />
+            <AlertTriangle className="w-5 h-5 text-amber-500/80" />
             <div>
-              <p className="font-mono text-sm font-bold uppercase tracking-wider text-amber-800">
+              <p className="text-sm font-semibold text-amber-100">
                 {t('dashboard.llmNotConfiguredTitle')}
               </p>
-              <p className="font-mono text-xs text-amber-700 mt-0.5">
+              <p className="text-xs text-amber-200/60 mt-0.5">
                 {t('dashboard.llmNotConfiguredMessage')}
               </p>
             </div>
           </div>
           <Link href="/settings">
-            <Button variant="outline" size="sm" className="border-warning text-amber-700">
+            <Button variant="outline" size="sm" className="border-amber-500/20 text-amber-200 bg-transparent hover:bg-amber-500/10 rounded-lg">
               <Settings className="w-4 h-4 mr-2" />
               {t('nav.settings')}
             </Button>
@@ -318,30 +320,29 @@ export default function DashboardPage() {
         </div>
       )}
 
-      <SwissGrid>
+      <BentoGrid>
         {/* 1. Master Resume Logic */}
         {!masterResumeId ? (
           // LLM Not Configured or Upload State
           !isLlmConfigured && !statusLoading ? (
-            <Link href="/settings" className="block h-full">
+            <Link href="/settings" className="block h-full col-span-1 md:col-span-2 lg:col-span-2 row-span-2 min-h-[300px]">
               <Card
-                variant="interactive"
-                className="aspect-square h-full border-dashed border-warning bg-amber-50"
+                className="h-full border border-white/5 bg-zinc-900/40 hover:bg-zinc-800/60 transition-all hover:border-white/10 group relative overflow-hidden"
               >
-                <div className="flex-1 flex flex-col justify-between">
-                  <div className="w-14 h-14 border-2 border-warning bg-white flex items-center justify-center mb-4">
-                    <AlertTriangle className="w-7 h-7 text-warning" />
+                <div className="flex-1 flex flex-col justify-between relative z-10 p-8 h-full">
+                  <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-4 rounded-2xl transition-all">
+                    <AlertTriangle className="w-6 h-6 text-zinc-400 group-hover:text-zinc-300" />
                   </div>
                   <div>
-                    <CardTitle className="text-lg uppercase text-amber-800 mb-2">
+                    <CardTitle className="text-2xl font-medium text-zinc-200 mb-2">
                       {t('dashboard.setupRequiredTitle')}
                     </CardTitle>
-                    <CardDescription className="text-amber-700 text-xs">
+                    <CardDescription className="text-zinc-500 text-sm">
                       {t('dashboard.setupRequiredMessage')}
                     </CardDescription>
-                    <div className="flex items-center gap-2 mt-4 text-amber-700 group-hover:text-amber-900">
+                    <div className="flex items-center gap-2 mt-6 text-zinc-400 group-hover:text-zinc-300 transition-colors">
                       <Settings className="w-4 h-4" />
-                      <span className="font-mono text-xs font-bold uppercase">
+                      <span className="text-sm font-medium">
                         {t('nav.goToSettings')}
                       </span>
                     </div>
@@ -350,44 +351,43 @@ export default function DashboardPage() {
               </Card>
             </Link>
           ) : (
-            <ResumeUploadDialog
-              open={isUploadDialogOpen}
-              onOpenChange={setIsUploadDialogOpen}
-              onUploadComplete={handleUploadComplete}
-              trigger={
-                <Card
-                  variant="interactive"
-                  className="aspect-square h-full hover:bg-primary hover:text-canvas"
-                >
-                  <div className="flex-1 flex flex-col justify-between pointer-events-none">
-                    <div className="w-14 h-14 border-2 border-current flex items-center justify-center mb-4">
-                      <span className="text-2xl leading-none relative top-[-2px]">+</span>
+            <div className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2 min-h-[300px] h-full">
+              <ResumeUploadDialog
+                open={isUploadDialogOpen}
+                onOpenChange={setIsUploadDialogOpen}
+                onUploadComplete={handleUploadComplete}
+                trigger={
+                  <Card
+                    className="h-full border border-white/5 bg-zinc-900/40 hover:bg-zinc-800/60 transition-all hover:border-white/10 group cursor-pointer relative overflow-hidden shadow-xl shadow-black/20"
+                  >
+                    <div className="flex-1 flex flex-col justify-between relative z-10 p-8 pointer-events-none h-full">
+                      <div className="w-14 h-14 border border-white/10 flex items-center justify-center mb-4 rounded-2xl bg-white/5 group-hover:bg-white/10 transition-all">
+                        <span className="text-2xl text-zinc-300 relative group-hover:scale-110 transition-transform">+</span>
+                      </div>
+                      <div>
+                        <CardTitle className="text-2xl font-medium text-zinc-200">
+                          {t('dashboard.initializeMasterResume')}
+                        </CardTitle>
+                        <CardDescription className="mt-2 text-zinc-500 text-sm">
+                          {t('dashboard.initializeSequence')}
+                        </CardDescription>
+                      </div>
                     </div>
-                    <div>
-                      <CardTitle className="text-xl uppercase">
-                        {t('dashboard.initializeMasterResume')}
-                      </CardTitle>
-                      <CardDescription className="mt-2 opacity-60 group-hover:opacity-100 text-current">
-                        {'// '}
-                        {t('dashboard.initializeSequence')}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </Card>
-              }
-            />
+                  </Card>
+                }
+              />
+            </div>
           )
         ) : (
           // Master Resume Exists
           <Card
-            variant="interactive"
-            className="aspect-square h-full"
+            className="col-span-1 md:col-span-2 lg:col-span-2 row-span-2 min-h-[300px] border border-white/5 bg-zinc-900/40 hover:bg-zinc-800/60 transition-all hover:border-white/10 group cursor-pointer relative overflow-hidden shadow-xl shadow-black/20"
             onClick={() => router.push(`/resumes/${masterResumeId}`)}
           >
-            <div className="flex-1 flex flex-col h-full">
+            <div className="flex-1 flex flex-col h-full relative z-10 p-8">
               <div className="flex justify-between items-start mb-6">
-                <div className="w-16 h-16 border-2 border-black bg-blue-700 text-white flex items-center justify-center">
-                  <span className="font-mono font-bold text-lg">M</span>
+                <div className="w-16 h-16 border border-white/10 bg-white/5 text-zinc-300 flex items-center justify-center rounded-2xl transition-all group-hover:bg-white/10">
+                  <span className="font-semibold text-2xl">M</span>
                 </div>
                 <div className="flex gap-1">
                   {(processingStatus === 'failed' || processingStatus === 'processing') && (
@@ -395,16 +395,16 @@ export default function DashboardPage() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 hover:bg-blue-100 hover:text-blue-700 z-10 rounded-none relative"
+                        className="h-8 w-8 hover:bg-zinc-800/50 text-zinc-400 z-10 relative rounded-lg border border-transparent hover:border-white/10"
                         onClick={handleRetryProcessing}
                         disabled={isRetrying}
                         aria-label={t('dashboard.retryProcessing')}
                         title={t('dashboard.retryProcessing')}
                       >
                         {isRetrying ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
                         ) : (
-                          <RefreshCw className="w-4 h-4" />
+                          <RefreshCw className="w-4 h-4 text-zinc-400" />
                         )}
                       </Button>
                     </>
@@ -412,23 +412,27 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <CardTitle className="text-lg group-hover:text-primary">
+              <CardTitle className="text-2xl font-medium text-zinc-100 group-hover:text-white transition-colors">
                 {t('dashboard.masterResume')}
               </CardTitle>
 
               <div
-                className={`text-xs font-mono mt-auto pt-4 flex flex-col gap-2 uppercase ${getStatusDisplay().color}`}
+                className={`text-sm mt-auto pt-4 flex flex-col gap-3 font-medium ${
+                  processingStatus === 'ready' ? 'text-zinc-300' :
+                  processingStatus === 'failed' ? 'text-red-400' :
+                  processingStatus === 'processing' ? 'text-zinc-400' : 'text-zinc-500'
+                }`}
               >
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-2">
                   {getStatusDisplay().icon}
-                  {t('dashboard.statusLine', { status: getStatusDisplay().text })}
+                  <span>{t('dashboard.statusLine', { status: getStatusDisplay().text })}</span>
                 </div>
                 {(processingStatus === 'failed' || processingStatus === 'processing') && (
                   <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs h-7 rounded-none border-black"
+                      className="text-xs h-8 bg-zinc-900/50 border-white/10 text-zinc-300 hover:bg-zinc-800 rounded-lg"
                       onClick={handleRetryProcessing}
                       disabled={isRetrying}
                     >
@@ -439,7 +443,7 @@ export default function DashboardPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-xs h-7 rounded-none border-red-600 text-red-600 hover:bg-red-50"
+                      className="text-xs h-8 bg-red-950/20 border-red-900/30 text-red-400 hover:bg-red-900/40 rounded-lg"
                       onClick={handleDeleteAndReupload}
                     >
                       {t('dashboard.deleteAndReupload')}
@@ -452,35 +456,37 @@ export default function DashboardPage() {
         )}
 
         {/* 2. Tailored Resumes */}
-        {tailoredResumes.map((resume) => {
+        {tailoredResumes.map((resume, index) => {
           const title =
             resume.title || resume.jobSnippet || resume.filename || t('dashboard.tailoredResume');
           const color = cardPalette[hashTitle(title) % cardPalette.length];
+          // Alternate spans for Bento effect
+          const colSpan = index % 3 === 0 ? 'col-span-1 md:col-span-2' : 'col-span-1';
+          
           return (
             <Card
               key={resume.resume_id}
-              variant="interactive"
-              className="aspect-square h-full bg-canvas"
+              className={`${colSpan} row-span-1 min-h-[220px] border border-white/5 bg-zinc-900/40 hover:bg-zinc-800/60 transition-all group cursor-pointer relative overflow-hidden`}
               onClick={() => router.push(`/resumes/${resume.resume_id}`)}
             >
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col p-6 relative z-10 h-full">
                 <div className="flex justify-between items-start mb-6">
                   <div
-                    className="w-12 h-12 border-2 border-black flex items-center justify-center"
-                    style={{ backgroundColor: color.bg, color: color.fg }}
+                    className="w-12 h-12 flex items-center justify-center rounded-xl transition-all border"
+                    style={{ backgroundColor: color.bg, color: color.fg, borderColor: color.border }}
                   >
-                    <span className="font-mono font-bold">{getMonogram(title)}</span>
+                    <span className="font-semibold text-lg">{getMonogram(title)}</span>
                   </div>
-                  <span className="font-mono text-xs text-steel-grey uppercase">
+                  <span className="text-[10px] font-medium text-zinc-500 uppercase tracking-widest border border-white/5 px-2 py-0.5 rounded-md bg-zinc-800/30">
                     {resume.processing_status}
                   </span>
                 </div>
-                <CardTitle className="text-lg">
-                  <span className="block font-serif text-base font-bold leading-tight mb-1 w-full line-clamp-2">
+                <CardTitle className="text-lg font-medium text-zinc-200 group-hover:text-white transition-colors">
+                  <span className="block leading-tight mb-1 w-full line-clamp-2">
                     {title}
                   </span>
                 </CardTitle>
-                <CardDescription className="mt-auto pt-4 uppercase">
+                <CardDescription className="mt-auto pt-4 text-xs font-medium text-zinc-500 group-hover:text-zinc-400">
                   {t('dashboard.edited', {
                     date: formatDate(resume.updated_at || resume.created_at),
                   })}{' '}
@@ -491,37 +497,33 @@ export default function DashboardPage() {
         })}
 
         {/* 3. Create Tailored Resume */}
-        <Card className="aspect-square h-full" variant="default">
-          <div className="flex-1 flex flex-col items-center justify-center text-center h-full">
-            <Button
-              onClick={() => router.push('/tailor')}
-              disabled={!isTailorEnabled}
-              className="w-20 h-20 bg-blue-700 text-white border-2 border-black shadow-sw-default hover:bg-blue-800 hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-none transition-all rounded-none"
+        <Card 
+          className="col-span-1 row-span-1 min-h-[220px] border border-dashed border-white/10 bg-zinc-900/20 hover:bg-zinc-800/40 hover:border-white/20 transition-all group relative overflow-hidden flex flex-col items-center justify-center text-center cursor-pointer"
+          onClick={() => isTailorEnabled && router.push('/tailor')}
+        >
+          <div className="relative z-10 flex flex-col items-center justify-center h-full p-6">
+            <div
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all ${
+                isTailorEnabled 
+                  ? 'bg-white/5 border-white/10 text-zinc-300 group-hover:bg-white/10 group-hover:scale-105' 
+                  : 'bg-zinc-900 border-zinc-800 text-zinc-600'
+              }`}
             >
-              <Plus className="w-8 h-8" />
-            </Button>
-            <p className="text-xs font-mono mt-4 uppercase text-green-700">
+              <Plus className="w-6 h-6" />
+            </div>
+            <p className={`mt-4 font-medium transition-colors ${
+              isTailorEnabled ? 'text-zinc-300 group-hover:text-zinc-100' : 'text-zinc-600'
+            }`}>
               {t('dashboard.createResume')}
             </p>
           </div>
         </Card>
 
-        {/* 4. Fillers */}
-        {Array.from({ length: fillerCount }).map((_, index) => (
+        {/* 4. Fillers to complete the grid */}
+        {Array.from({ length: fillersNeeded }).map((_, index) => (
           <Card
             key={`filler-${index}`}
-            variant="ghost"
-            noPadding
-            className="hidden md:block bg-canvas aspect-square h-full opacity-50 pointer-events-none"
-          />
-        ))}
-
-        {Array.from({ length: extraFillerCount }).map((_, index) => (
-          <Card
-            key={`extra-filler-${index}`}
-            variant="ghost"
-            noPadding
-            className={`hidden md:block ${fillerPalette[index % fillerPalette.length]} aspect-square h-full opacity-70 pointer-events-none`}
+            className={`hidden md:block col-span-1 row-span-1 min-h-[220px] ${fillerPalette[index % fillerPalette.length]} border border-white/5 opacity-40 pointer-events-none rounded-3xl transition-opacity hover:opacity-50`}
           />
         ))}
 
@@ -535,7 +537,7 @@ export default function DashboardPage() {
           onConfirm={confirmDeleteAndReupload}
           variant="danger"
         />
-      </SwissGrid>
+      </BentoGrid>
     </div>
   );
 }

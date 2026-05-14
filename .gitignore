@@ -28,7 +28,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-uv.lock
+# uv.lock should be committed for reproducible installs — do NOT ignore it
+# uv.lock
 
 # SQLite databases
 *.sqlite3
@@ -42,7 +43,13 @@ htmlcov/
 
 # Local instance or config files specific to backend
 instance/
-.env # Backend specific environment variables
+.env
+# Backend environment files — NEVER commit real keys
+apps/backend/.env
+apps/backend/.env.local
+# Backend runtime data (TinyDB JSON storage)
+apps/backend/data/*.json
+!apps/backend/data/.gitkeep
 
 # Config file with API keys - NEVER COMMIT
 **/config.json
@@ -109,7 +116,10 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.local
+.env.production
+!.env.example
 
 # vercel
 .vercel

@@ -8,17 +8,17 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', noPadding = false, ...props }, ref) => {
-    const baseStyles = 'rounded-none flex flex-col relative overflow-hidden';
+    const baseStyles = 'rounded-3xl flex flex-col relative overflow-hidden';
 
     const variants = {
-      default: 'bg-canvas',
+      default: 'bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-lg',
       interactive: cn(
-        'bg-canvas border-2 border-transparent', // Initial state
+        'bg-zinc-900/40 backdrop-blur-xl border border-white/10 shadow-lg', // Initial state
         'transition-all duration-200 ease-in-out',
         'cursor-pointer group',
-        'hover:z-20 hover:border-ink hover:shadow-sw-default hover:-translate-y-[2px] hover:-translate-x-[2px]'
+        'hover:z-20 hover:border-white/30 hover:bg-zinc-800/60 hover:shadow-2xl hover:shadow-black/50 hover:-translate-y-[2px]'
       ),
-      outline: 'bg-canvas border-2 border-ink',
+      outline: 'bg-zinc-950/50 backdrop-blur-md border border-white/10',
       ghost: 'bg-transparent border-none shadow-none',
     };
 
@@ -49,7 +49,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('font-serif text-2xl font-semibold leading-none tracking-tight', className)}
+      className={cn('text-xl font-semibold leading-none tracking-tight text-zinc-100', className)}
       {...props}
     />
   )
@@ -60,7 +60,7 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p ref={ref} className={cn('text-sm text-steel-grey font-mono', className)} {...props} />
+  <p ref={ref} className={cn('text-sm text-zinc-400', className)} {...props} />
 ));
 CardDescription.displayName = 'CardDescription';
 

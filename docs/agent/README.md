@@ -1,8 +1,8 @@
-# Resume Matcher — Agent Documentation Index
+# Recro AI — Agent Documentation Index
 
-> Project-specific reference for agents working in the Resume Matcher codebase.
+> Project-specific reference for agents working in the Recro AI codebase.
 
-Generic, reusable guides (Swiss design system, Next.js performance) live in [`../portable/`](../portable/README.md) as standalone packs that can be lifted out of this repo and dropped into any project. This index covers only the docs that are tied to Resume Matcher itself.
+Generic, reusable guides (Swiss design system, Next.js performance) live in [`../portable/`](../portable/README.md) as standalone packs that can be lifted out of this repo and dropped into any project. This index covers only the docs that are tied to Recro AI itself.
 
 ## Quick Navigation
 
@@ -30,7 +30,7 @@ Generic, reusable guides (Swiss design system, Next.js performance) live in [`..
 | [api-flow-maps](apis/api-flow-maps.md) | Request/response flows |
 | [backend-requirements](apis/backend-requirements.md) | Backend behavioral requirements |
 
-### Design (Resume Matcher specifics)
+### Design (Recro AI specifics)
 | Doc | Purpose |
 |-----|---------|
 | [template-system](design/template-system.md) | Resume template architecture |

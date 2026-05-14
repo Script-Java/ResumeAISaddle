@@ -80,7 +80,7 @@ export function QuestionStep({
       {/* Progress indicator */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-sm text-steel-grey">
+          <span className="font-mono text-sm text-zinc-400">
             {t('enrichment.questionProgress', { current: questionNumber, total: totalQuestions })}
           </span>
         </div>
@@ -88,12 +88,12 @@ export function QuestionStep({
           {Array.from({ length: totalQuestions }).map((_, i) => (
             <div
               key={i}
-              className={`h-1.5 w-6 transition-colors ${
+              className={`h-1.5 w-6 rounded-full transition-colors ${
                 i < questionNumber
-                  ? 'bg-black'
+                  ? 'bg-emerald-500'
                   : i === questionNumber - 1
-                    ? 'bg-black'
-                    : 'bg-paper-tint'
+                    ? 'bg-emerald-500/50'
+                    : 'bg-zinc-800'
               }`}
             />
           ))}
@@ -103,47 +103,47 @@ export function QuestionStep({
       {/* Item context badge */}
       {item && (
         <div className="mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-paper-tint border border-paper-tint text-sm font-mono">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-900/50 border border-white/5 text-sm font-mono">
             {item.item_type === 'experience' ? (
-              <Briefcase className="w-4 h-4 text-ink-soft" />
+              <Briefcase className="w-4 h-4 text-zinc-400" />
             ) : (
-              <FolderKanban className="w-4 h-4 text-ink-soft" />
+              <FolderKanban className="w-4 h-4 text-zinc-400" />
             )}
-            <span className="text-ink-soft">
+            <span className="text-zinc-400">
               {item.item_type === 'experience'
                 ? t('enrichment.itemType.experience')
                 : t('enrichment.itemType.project')}
               :
             </span>
-            <span className="font-semibold text-ink-soft">{item.title}</span>
-            {item.subtitle && <span className="text-steel-grey">@ {item.subtitle}</span>}
+            <span className="font-semibold text-zinc-200">{item.title}</span>
+            {item.subtitle && <span className="text-zinc-500">@ {item.subtitle}</span>}
           </div>
         </div>
       )}
 
       {/* Question */}
       <div className="flex-1">
-        <h2 className="text-2xl font-bold mb-6 leading-tight">{question.question}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight text-zinc-100 mb-6 leading-tight">{question.question}</h2>
 
         <Textarea
           ref={textareaRef}
           value={localAnswer}
           onChange={(e) => handleChange(e.target.value)}
           placeholder={question.placeholder}
-          className="min-h-[180px] text-base resize-none font-mono"
+          className="min-h-[180px] text-base resize-none font-mono rounded-2xl border-white/10 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus-visible:ring-emerald-500"
         />
 
-        <p className="text-xs text-steel-grey mt-2 font-mono">{t('enrichment.shortcutHint')}</p>
+        <p className="text-xs text-zinc-500 mt-3 font-mono">{t('enrichment.shortcutHint')}</p>
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between pt-6 border-t border-paper-tint mt-6">
-        <Button variant="outline" onClick={onPrev} disabled={isFirst} className="gap-2">
+      <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-6">
+        <Button variant="outline" onClick={onPrev} disabled={isFirst} className="gap-2 rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
           <ChevronLeft className="w-4 h-4" />
           {t('common.back')}
         </Button>
 
-        <Button onClick={handleContinue} className="gap-2">
+        <Button onClick={handleContinue} className="gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black">
           {isLast ? (
             <>
               {t('common.finish')}

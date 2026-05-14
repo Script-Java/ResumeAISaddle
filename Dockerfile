@@ -1,4 +1,4 @@
-# Resume Matcher Docker Image
+# Recro AI Docker Image
 # Multi-stage build for optimized image size
 
 # ============================================

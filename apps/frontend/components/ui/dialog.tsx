@@ -136,7 +136,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className }) =>
     <div className="fixed inset-0 z-50">
       {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/50 animate-in fade-in-0"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in-0"
         onClick={() => onOpenChange(false)}
       />
       {/* Content */}
@@ -147,8 +147,8 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className }) =>
           aria-labelledby={titleId}
           className={cn(
             'relative w-full max-w-lg',
-            'border border-black bg-background shadow-sw-lg',
-            'rounded-none',
+            'border border-white/10 bg-zinc-900/90 backdrop-blur-xl shadow-2xl shadow-black/50',
+            'rounded-2xl',
             'animate-in fade-in-0 zoom-in-95 duration-200',
             className
           )}
@@ -157,7 +157,7 @@ const DialogContent: React.FC<DialogContentProps> = ({ children, className }) =>
           {children}
           <button
             onClick={() => onOpenChange(false)}
-            className="absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-offset-2"
+            className="absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900 text-zinc-400 hover:text-zinc-100"
           >
             <X className="h-5 w-5" />
             <span className="sr-only">{t('common.close')}</span>
@@ -204,7 +204,7 @@ const DialogTitle: React.FC<DialogTitleProps> = ({ className, children, ...props
   return (
     <h2
       id={titleId}
-      className={cn('font-serif text-lg font-bold leading-none tracking-tight', className)}
+      className={cn('text-lg font-semibold tracking-wide text-zinc-100', className)}
       {...props}
     >
       {children}
@@ -218,7 +218,7 @@ interface DialogDescriptionProps {
 }
 
 const DialogDescription: React.FC<DialogDescriptionProps> = ({ className, children, ...props }) => (
-  <p className={cn('text-sm text-ink-soft', className)} {...props}>
+  <p className={cn('text-sm text-zinc-400', className)} {...props}>
     {children}
   </p>
 );

@@ -13,11 +13,11 @@ function LoadingStep({ message, submessage }: LoadingStepProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-6">
       <div className="relative">
-        <Loader2 className="w-12 h-12 animate-spin text-black" />
+        <Loader2 className="w-12 h-12 animate-spin text-emerald-500" />
       </div>
       <div className="text-center">
-        <p className="text-xl font-mono font-bold">{message}</p>
-        {submessage && <p className="text-sm text-steel-grey mt-2 font-mono">{submessage}</p>}
+        <p className="text-xl font-mono font-bold text-zinc-100">{message}</p>
+        {submessage && <p className="text-sm text-zinc-400 mt-2 font-mono">{submessage}</p>}
       </div>
     </div>
   );
@@ -64,11 +64,11 @@ export function CompleteStep({ onClose, updatedCount }: CompleteStepProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-6">
       <div className="relative">
-        <CheckCircle2 className="w-16 h-16 text-green-600" />
+        <CheckCircle2 className="w-16 h-16 text-emerald-500" />
       </div>
       <div className="text-center">
-        <p className="text-2xl font-mono font-bold">{t('enrichment.complete.title')}</p>
-        <p className="text-sm text-steel-grey mt-2 font-mono">
+        <p className="text-2xl font-mono font-bold text-zinc-100">{t('enrichment.complete.title')}</p>
+        <p className="text-sm text-zinc-400 mt-2 font-mono">
           {hasUpdatedCount
             ? updatedCount === 1
               ? t('enrichment.complete.updatedCountSingular', { count: updatedCount })
@@ -76,7 +76,7 @@ export function CompleteStep({ onClose, updatedCount }: CompleteStepProps) {
             : t('enrichment.complete.updatedFallback')}
         </p>
       </div>
-      <Button onClick={onClose} className="mt-4 gap-2">
+      <Button onClick={onClose} className="mt-4 gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black">
         <Sparkles className="w-4 h-4" />
         {t('enrichment.complete.doneButton')}
       </Button>
@@ -94,15 +94,15 @@ export function NoImprovementsStep({ onClose, summary }: NoImprovementsStepProps
   return (
     <div className="flex flex-col items-center justify-center h-full min-h-[400px] gap-6">
       <div className="relative">
-        <CheckCircle2 className="w-16 h-16 text-green-600" />
+        <CheckCircle2 className="w-16 h-16 text-emerald-500" />
       </div>
       <div className="text-center max-w-md">
-        <p className="text-2xl font-mono font-bold">{t('enrichment.noImprovements.title')}</p>
-        <p className="text-sm text-steel-grey mt-2 font-mono">
+        <p className="text-2xl font-mono font-bold text-zinc-100">{t('enrichment.noImprovements.title')}</p>
+        <p className="text-sm text-zinc-400 mt-2 font-mono">
           {summary || t('enrichment.noImprovements.defaultDescription')}
         </p>
       </div>
-      <Button onClick={onClose} className="mt-4 gap-2">
+      <Button onClick={onClose} className="mt-4 gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black">
         <Sparkles className="w-4 h-4" />
         {t('common.close')}
       </Button>
@@ -124,16 +124,16 @@ export function ErrorStep({ error, onRetry, onClose }: ErrorStepProps) {
         <AlertCircle className="w-16 h-16 text-red-500" />
       </div>
       <div className="text-center max-w-md">
-        <p className="text-xl font-mono font-bold">{t('enrichment.error.title')}</p>
-        <p className="text-sm text-red-600 mt-2 font-mono bg-red-50 p-3 border border-red-200">
+        <p className="text-xl font-mono font-bold text-zinc-100">{t('enrichment.error.title')}</p>
+        <p className="text-sm text-red-400 mt-2 font-mono bg-red-500/10 p-3 border border-red-500/20 rounded-lg">
           {error}
         </p>
       </div>
       <div className="flex gap-3 mt-4">
-        <Button variant="outline" onClick={onClose}>
+        <Button variant="outline" onClick={onClose} className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
           {t('common.cancel')}
         </Button>
-        <Button onClick={onRetry}>{t('common.retry')}</Button>
+        <Button onClick={onRetry} className="rounded-xl bg-zinc-100 hover:bg-white text-zinc-900">{t('common.retry')}</Button>
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import {
   fetchFeaturePrompts,
   updateFeaturePrompts,
   FeaturePromptsError,
+  updateApiKeys,
   type LLMConfigUpdate,
   type LLMProvider,
   type LLMHealthCheck,
@@ -71,9 +72,9 @@ const PROVIDERS: LLMProvider[] = [
 ];
 
 const SEGMENTED_BUTTON_BASE =
-  'border border-black font-mono transition-all duration-150 ease-out shadow-sw-sm hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none disabled:cursor-not-allowed disabled:opacity-50';
-const SEGMENTED_BUTTON_ACTIVE = 'bg-blue-700 text-white border-black hover:bg-blue-800';
-const SEGMENTED_BUTTON_INACTIVE = 'bg-white text-black hover:bg-secondary';
+  'font-medium transition-all duration-200 ease-out rounded-lg disabled:cursor-not-allowed disabled:opacity-50';
+const SEGMENTED_BUTTON_ACTIVE = 'bg-white/10 text-zinc-100 shadow-sm border border-white/10';
+const SEGMENTED_BUTTON_INACTIVE = 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5 border border-transparent';
 
 const unwrapCodeBlock = (value?: string | null): string | null => {
   if (!value) return null;
@@ -105,7 +106,7 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   // LLM Config state
-  const [provider, setProvider] = useState<LLMProvider>('openai');
+  const [provider, setProvider] = useState<LLMProvider>('ollama');
   const [model, setModel] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [apiBase, setApiBase] = useState('');
@@ -274,10 +275,10 @@ export default function SettingsPage() {
         if (cancelled) return;
 
         if (llmConfig) {
-          const providerFromBackend = llmConfig.provider || 'openai';
+          const providerFromBackend = llmConfig.provider || 'ollama';
           const safeProvider = PROVIDERS.includes(providerFromBackend as LLMProvider)
             ? (providerFromBackend as LLMProvider)
-            : 'openai';
+            : 'ollama';
           setProvider(safeProvider);
           setModel(llmConfig.model || PROVIDER_INFO[safeProvider].defaultModel);
           const isMaskedKey = Boolean(llmConfig.api_key) && llmConfig.api_key.includes('*');
@@ -329,12 +330,13 @@ export default function SettingsPage() {
     setProvider(newProvider);
     setModel(PROVIDER_INFO[newProvider].defaultModel);
 
-    if (newProvider === 'ollama' && !apiBase.trim()) {
+    if (newProvider === 'ollama') {
       setApiBase('http://localhost:11434');
-    }
-    if (newProvider === 'openai_compatible' && !apiBase.trim()) {
+    } else if (newProvider === 'openai_compatible') {
       // llama.cpp default; user can override for vLLM / LM Studio / etc.
       setApiBase('http://localhost:8080/v1');
+    } else {
+      setApiBase('');
     }
 
     // Clear API key input when switching providers to avoid accidental cross-provider usage.
@@ -372,6 +374,21 @@ export default function SettingsPage() {
       //     field (mainly the required path; same shape for consistency).
       if (trimmedKey) {
         update.api_key = trimmedKey;
+        const apiKeysProviderMap: Record<string, string> = {
+          'openai': 'openai',
+          'anthropic': 'anthropic',
+          'gemini': 'google',
+          'openrouter': 'openrouter',
+          'deepseek': 'deepseek',
+        };
+        const mappedProvider = apiKeysProviderMap[provider];
+        if (mappedProvider) {
+          try {
+            await updateApiKeys({ [mappedProvider]: trimmedKey });
+          } catch (e) {
+            console.warn("Failed to sync api key to provider storage", e);
+          }
+        }
       } else if (!hasStoredApiKey) {
         update.api_key = '';
       }
@@ -495,8 +512,8 @@ export default function SettingsPage() {
       // Refetch full LLM config to ensure local state is synced with backend
       const llmConfig = await fetchLlmConfig().catch(() => null);
       if (llmConfig) {
-        setProvider(llmConfig.provider || 'openai');
-        setModel(llmConfig.model || PROVIDER_INFO['openai'].defaultModel);
+        setProvider(llmConfig.provider || 'ollama');
+        setModel(llmConfig.model || PROVIDER_INFO['ollama'].defaultModel);
         const isMaskedKey = Boolean(llmConfig.api_key) && llmConfig.api_key.includes('*');
         setHasStoredApiKey(Boolean(llmConfig.api_key));
         setApiKey(isMaskedKey ? '' : llmConfig.api_key || '');
@@ -572,38 +589,47 @@ export default function SettingsPage() {
   const requiresApiKey = providerInfo.requiresKey ?? true;
 
   return (
-    <div className="flex flex-col items-center justify-start p-6 md:p-12 min-h-screen overflow-y-auto">
-      <div className="w-full max-w-4xl border border-black bg-background shadow-sw-lg">
+    <div 
+      className="flex flex-col items-center justify-start p-4 sm:p-6 md:p-12 min-h-screen overflow-y-auto overflow-x-hidden bg-zinc-950"
+      style={{
+        backgroundImage:
+          'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+        backgroundPosition: 'center center',
+      }}
+    >
+      <div className="w-full max-w-5xl space-y-8 min-w-0">
         {/* Header */}
-        <div className="border-b border-black p-8 bg-white flex justify-between items-start">
-          <div>
-            <h1 className="font-serif text-3xl font-bold tracking-tight uppercase">
+        <div className="w-full border border-white/5 bg-zinc-900/40 backdrop-blur-2xl shadow-2xl shadow-black/50 p-4 sm:p-6 md:p-8 rounded-3xl flex flex-col sm:flex-row justify-between items-start gap-4 sm:gap-0">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-zinc-100 break-words">
               {t('settings.title')}
             </h1>
-            <p className="font-mono text-xs text-steel-grey mt-2 uppercase tracking-wider">
-              {'// '}
+            <p className="text-sm font-medium tracking-wide text-zinc-400 mt-2">
               {t('settings.subtitle')}
             </p>
           </div>
-          <Link href="/dashboard">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="w-4 h-4" />
+          <Link href="/dashboard" className="shrink-0 w-full sm:w-auto">
+            <Button variant="outline" size="sm" className="w-full sm:w-auto bg-zinc-800/50 border-white/10 text-zinc-200 hover:bg-zinc-700/50 rounded-xl">
+              <ArrowLeft className="w-4 h-4 mr-2" />
               {t('common.back')}
             </Button>
           </Link>
         </div>
 
-        <div className="p-8 space-y-10">
+        <div className="space-y-12">
           {/* API Key Not Configured Warning */}
           {!statusLoading && systemStatus && !systemStatus.llm_configured && (
-            <div className="border-2 border-amber-500 bg-amber-50 p-4 shadow-sw-default">
-              <div className="flex items-start gap-3">
-                <div className="w-3 h-3 bg-amber-500 mt-1 shrink-0"></div>
+            <div className="border border-amber-500/20 bg-amber-500/5 p-6 rounded-3xl shadow-xl shadow-black/20">
+              <div className="flex items-start gap-4">
+                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                  <AlertTriangle className="w-5 h-5 text-amber-500/80" />
+                </div>
                 <div className="flex-1">
-                  <p className="font-mono text-sm font-bold uppercase tracking-wider text-amber-800">
+                  <p className="font-semibold text-amber-100">
                     {t('settings.setupRequired.title')}
                   </p>
-                  <p className="font-mono text-xs text-amber-700 mt-1">
+                  <p className="text-sm text-amber-200/60 mt-1">
                     {t('settings.setupRequired.description')}
                   </p>
                 </div>
@@ -612,17 +638,17 @@ export default function SettingsPage() {
           )}
 
           {/* System Status Panel */}
-          <section className="space-y-4">
-            <div className="flex items-center justify-between border-b border-black/10 pb-2">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4" />
-                  <h2 className="font-mono text-sm font-bold uppercase tracking-wider">
-                    {t('settings.systemStatus.title')}
-                  </h2>
+          <section className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div className="p-2 rounded-xl bg-white/5 border border-white/10 shrink-0">
+                  <Activity className="w-4 h-4 text-zinc-300" />
                 </div>
+                <h2 className="text-lg sm:text-xl font-medium tracking-wide text-zinc-100">
+                  {t('settings.systemStatus.title')}
+                </h2>
                 {lastFetched && (
-                  <span className="font-mono text-xs text-steel-grey flex items-center gap-1">
+                  <span className="text-xs font-medium text-zinc-500 flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {formatLastFetched()}
                   </span>
@@ -633,141 +659,150 @@ export default function SettingsPage() {
                 size="sm"
                 onClick={refreshStatus}
                 disabled={statusLoading}
-                className="gap-1 text-xs"
+                className="gap-2 text-sm text-zinc-400 hover:text-zinc-200 hover:bg-white/5 rounded-lg self-start sm:self-auto"
               >
-                <RefreshCw className={`w-3 h-3 ${statusLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${statusLoading ? 'animate-spin' : ''}`} />
                 {t('settings.systemStatus.refresh')}
               </Button>
             </div>
 
             {statusLoading ? (
-              <div className="flex items-center justify-center p-8">
-                <Loader2 className="w-6 h-6 animate-spin text-steel-grey" />
+              <div className="flex items-center justify-center p-12">
+                <Loader2 className="w-8 h-8 animate-spin text-zinc-600" />
               </div>
             ) : !systemStatus ? (
-              <div className="flex flex-col items-center justify-center p-8 gap-3 border border-dashed border-red-300 bg-red-50">
-                <p className="font-mono text-xs text-red-600 uppercase">
+              <div className="flex flex-col items-center justify-center p-12 gap-4 border border-dashed border-red-500/30 bg-red-500/5 rounded-3xl">
+                <p className="text-sm font-semibold text-red-400">
                   {t('settings.systemStatus.unableToConnect')}
                 </p>
-                <p className="font-mono text-xs text-ink-soft">
+                <p className="text-xs text-zinc-500">
                   {t('settings.systemStatus.expectedAt', { apiUrl: API_URL })}
                 </p>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={refreshStatus}
-                  className="gap-1 text-xs"
+                  className="gap-2 text-sm border-red-500/20 text-red-300 hover:bg-red-500/10 rounded-lg"
                 >
-                  <RefreshCw className="w-3 h-3" />
+                  <RefreshCw className="w-4 h-4" />
                   {t('common.retry')}
                 </Button>
               </div>
             ) : (
-              // @container so the status cards adapt to the section width
-              // rather than the viewport — useful when the settings page is
-              // shown alongside a sidebar or in a split view.
-              <div className="@container">
-                <div className="grid grid-cols-2 @3xl:grid-cols-4 gap-4">
-                  {/* LLM Status */}
-                  <div className="border border-black bg-white p-4 shadow-sw-sm">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Server className="w-4 h-4 text-steel-grey" />
-                      <span className="font-mono text-xs uppercase text-steel-grey">
-                        {t('settings.statusCards.llm')}
-                      </span>
+                <div className="@container">
+                  <div className="grid grid-cols-2 @xl:grid-cols-4 gap-3 sm:gap-4">
+                    {/* LLM Status */}
+                    <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="p-1.5 sm:p-2 rounded-lg bg-white/5">
+                          <Server className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate">
+                          {t('settings.statusCards.llm')}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {systemStatus.llm_healthy ? (
+                          <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 shrink-0" />
+                        ) : (
+                          <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 shrink-0" />
+                        )}
+                        <span className="text-xs sm:text-sm font-semibold text-zinc-200 truncate">
+                          {systemStatus.llm_healthy
+                            ? t('settings.statusValues.healthy')
+                            : t('settings.statusValues.offline')}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {systemStatus.llm_healthy ? (
-                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      ) : (
-                        <XCircle className="w-5 h-5 text-red-500" />
-                      )}
-                      <span className="font-mono text-sm font-bold">
-                        {systemStatus.llm_healthy
-                          ? t('settings.statusValues.healthy')
-                          : t('settings.statusValues.offline')}
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Database Status */}
-                  <div className="border border-black bg-white p-4 shadow-sw-sm">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Database className="w-4 h-4 text-steel-grey" />
-                      <span className="font-mono text-xs uppercase text-steel-grey">
-                        {t('settings.statusCards.database')}
-                      </span>
+                    {/* Database Status */}
+                    <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="p-1.5 sm:p-2 rounded-lg bg-white/5">
+                          <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate">
+                          {t('settings.statusCards.database')}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 shrink-0" />
+                        <span className="text-xs sm:text-sm font-semibold text-zinc-200 truncate">
+                          {t('settings.statusValues.connected')}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="font-mono text-sm font-bold">
-                        {t('settings.statusValues.connected')}
-                      </span>
-                    </div>
-                  </div>
 
-                  {/* Resumes Count */}
-                  <div className="border border-black bg-white p-4 shadow-sw-sm">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FileText className="w-4 h-4 text-steel-grey" />
-                      <span className="font-mono text-xs uppercase text-steel-grey">
-                        {t('settings.statusCards.resumes')}
+                    {/* Resumes Count */}
+                    <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="p-1.5 sm:p-2 rounded-lg bg-white/5">
+                          <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate">
+                          {t('settings.statusCards.resumes')}
+                        </span>
+                      </div>
+                      <span className="text-2xl sm:text-3xl font-semibold text-zinc-100">
+                        {systemStatus.database_stats.total_resumes || 0}
                       </span>
                     </div>
-                    <span className="font-mono text-2xl font-bold">
-                      {systemStatus.database_stats.total_resumes}
-                    </span>
-                  </div>
 
-                  {/* Jobs Count */}
-                  <div className="border border-black bg-white p-4 shadow-sw-sm">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Briefcase className="w-4 h-4 text-steel-grey" />
-                      <span className="font-mono text-xs uppercase text-steel-grey">
-                        {t('settings.statusCards.jobs')}
+                    {/* Jobs Count */}
+                    <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                        <div className="p-1.5 sm:p-2 rounded-lg bg-white/5">
+                          <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                        </div>
+                        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate">
+                          {t('settings.statusCards.jobs')}
+                        </span>
+                      </div>
+                      <span className="text-2xl sm:text-3xl font-semibold text-zinc-100">
+                        {systemStatus.database_stats.total_jobs || 0}
                       </span>
                     </div>
-                    <span className="font-mono text-2xl font-bold">
-                      {systemStatus.database_stats.total_jobs}
-                    </span>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Additional Stats Row */}
             {systemStatus && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border border-black bg-white p-4 shadow-sw-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Sparkles className="w-4 h-4 text-steel-grey" />
-                    <span className="font-mono text-xs uppercase text-steel-grey">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <div className="p-1.5 sm:p-2 rounded-lg bg-white/5">
+                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />
+                    </div>
+                    <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-zinc-500 truncate">
                       {t('settings.statusCards.improvements')}
                     </span>
                   </div>
-                  <span className="font-mono text-2xl font-bold">
-                    {systemStatus.database_stats.total_improvements}
+                    <span className="text-2xl sm:text-3xl font-semibold text-zinc-100">
+                      {systemStatus.database_stats.total_improvements || 0}
                   </span>
                 </div>
-                <div className="border border-black bg-white p-4 shadow-sw-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <FileText className="w-4 h-4 text-steel-grey" />
-                    <span className="font-mono text-xs uppercase text-steel-grey">
+                <div className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 rounded-2xl shadow-xl shadow-black/20 hover:bg-zinc-800/50 transition-colors">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="p-2 rounded-lg bg-white/5">
+                      <FileText className="w-4 h-4 text-zinc-400" />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
                       {t('settings.statusCards.masterResume')}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {systemStatus.has_master_resume ? (
                       <>
-                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                        <span className="font-mono text-sm font-bold">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        <span className="text-sm font-semibold text-zinc-200">
                           {t('settings.statusValues.configured')}
                         </span>
                       </>
                     ) : (
                       <>
                         <XCircle className="w-5 h-5 text-amber-500" />
-                        <span className="font-mono text-sm font-bold">
+                        <span className="text-sm font-semibold text-amber-400">
                           {t('settings.statusValues.notSet')}
                         </span>
                       </>
@@ -779,66 +814,49 @@ export default function SettingsPage() {
           </section>
 
           {/* LLM Configuration */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-black/10 pb-2">
-              <Key className="w-4 h-4" />
-              <h2 className="font-mono text-sm font-bold uppercase tracking-wider">
+          <section className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl shadow-black/50 space-y-6 sm:space-y-8 min-w-0 overflow-hidden">
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                <Key className="w-5 h-5 text-zinc-300" />
+              </div>
+              <h2 className="text-xl font-medium tracking-wide text-zinc-100">
                 {t('settings.llmConfigurationTitle')}
               </h2>
             </div>
 
-            <div className="grid gap-6">
+            <div className="grid gap-5 sm:gap-8 min-w-0 [&>*]:min-w-0">
               {/* Provider Selection */}
-              <div className="space-y-2">
-                <Label>{t('settings.providerLabel')}</Label>
-                <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                  {PROVIDERS.map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => handleProviderChange(p)}
-                      className={`px-3 py-2 text-xs uppercase ${SEGMENTED_BUTTON_BASE} ${
-                        provider === p ? SEGMENTED_BUTTON_ACTIVE : SEGMENTED_BUTTON_INACTIVE
-                      }`}
-                    >
-                      {PROVIDER_INFO[p].name.split(' ')[0]}
-                    </button>
-                  ))}
-                </div>
-                <p className="text-xs text-steel-grey font-mono">
-                  {t('settings.llmConfiguration.selectedProvider', {
-                    provider: providerInfo.name,
-                  })}
-                </p>
-              </div>
+              <Dropdown
+                label={t('settings.providerLabel')}
+                value={provider}
+                onChange={(value) => handleProviderChange(value as LLMProvider)}
+                options={PROVIDERS.map((p) => ({
+                  id: p,
+                  label: PROVIDER_INFO[p].name,
+                  description: `Default: ${PROVIDER_INFO[p].defaultModel}`,
+                }))}
+              />
 
               {/* Model Input */}
-              <div className="space-y-2">
-                <Label htmlFor="model">{t('settings.llmConfiguration.modelLabel')}</Label>
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="model" className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-300">
+                  {t('settings.llmConfiguration.modelLabel')}
+                </Label>
                 <Input
                   id="model"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
                   placeholder={providerInfo.defaultModel}
-                  className="font-mono"
+                  className="bg-zinc-950/50 border-white/10 text-zinc-200 placeholder:text-zinc-600 rounded-xl text-sm"
                 />
-                <p className="text-xs text-steel-grey font-mono">
-                  {t('settings.llmConfiguration.defaultModel', {
-                    model: providerInfo.defaultModel,
-                  })}
-                </p>
               </div>
 
-              {/* API Key Input — always enabled. For providers that don't
-                  require a key (Ollama, OpenAI-Compatible local servers), the
-                  field is marked optional so users can STILL enter a key if
-                  their deployment needs auth (e.g., a secured LM Studio or a
-                  hosted OpenAI-compatible proxy). Save-time validation only
-                  fails when `requiresApiKey` is true. */}
-              <div className="space-y-2">
-                <Label htmlFor="apiKey">
+              {/* API Key Input */}
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="apiKey" className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-300">
                   {t('settings.llmConfiguration.apiKeyLabel')}{' '}
                   {!requiresApiKey && (
-                    <span className="text-steel-grey">
+                    <span className="text-zinc-500 font-normal normal-case">
                       {t('settings.llmConfiguration.apiKeyOptional')}
                     </span>
                   )}
@@ -853,70 +871,64 @@ export default function SettingsPage() {
                       ? t('settings.llmConfiguration.apiKeyPlaceholder')
                       : t('settings.llmConfiguration.apiKeyOptionalPlaceholder')
                   }
-                  className="font-mono"
+                  className="bg-zinc-950/50 border-white/10 text-zinc-200 placeholder:text-zinc-600 rounded-xl text-sm"
                 />
                 {hasStoredApiKey && !apiKey && (
-                  <p className="text-xs text-steel-grey font-mono">
+                  <p className="text-xs sm:text-sm text-emerald-500/80 font-medium">
                     {t('settings.llmConfiguration.leaveBlankToKeepExistingKey')}
                   </p>
                 )}
               </div>
 
-              {/* API Base URL (optional, for proxies/aggregators/custom endpoints) */}
-              <div className="space-y-2">
-                <Label htmlFor="apiBase">{t('settings.llmConfiguration.baseUrlLabel')}</Label>
+              {/* API Base URL */}
+              <div className="space-y-2 sm:space-y-3">
+                <Label htmlFor="apiBase" className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-zinc-300">
+                  {t('settings.llmConfiguration.baseUrlLabel')}
+                </Label>
                 <Input
                   id="apiBase"
                   value={apiBase}
                   onChange={(e) => setApiBase(e.target.value)}
                   placeholder={t('settings.llmConfiguration.baseUrlPlaceholder')}
-                  className="font-mono"
+                  className="bg-zinc-950/50 border-white/10 text-zinc-200 placeholder:text-zinc-600 rounded-xl text-sm"
                 />
-                <p className="text-xs text-steel-grey font-mono">
-                  {t('settings.llmConfiguration.baseUrlDescription')}
-                </p>
               </div>
 
               {/* Reasoning Effort (optional, only applies to reasoning-capable models) */}
-              <div className="space-y-2">
-                <Dropdown
-                  label={t('settings.llmConfiguration.reasoningEffortLabel')}
-                  value={reasoningEffort}
-                  onChange={(value) => setReasoningEffort(value as ReasoningEffort | 'auto')}
-                  options={[
-                    {
-                      id: 'auto',
-                      label: t('settings.llmConfiguration.reasoningEffortAuto'),
-                      description: t('settings.llmConfiguration.reasoningEffortAutoDesc'),
-                    },
-                    { id: 'minimal', label: t('settings.llmConfiguration.reasoningEffortMinimal') },
-                    { id: 'low', label: t('settings.llmConfiguration.reasoningEffortLow') },
-                    { id: 'medium', label: t('settings.llmConfiguration.reasoningEffortMedium') },
-                    { id: 'high', label: t('settings.llmConfiguration.reasoningEffortHigh') },
-                  ]}
-                />
-                <p className="text-xs text-steel-grey font-mono">
-                  {t('settings.llmConfiguration.reasoningEffortDescription')}
-                </p>
-              </div>
+              <Dropdown
+                label={t('settings.llmConfiguration.reasoningEffortLabel')}
+                value={reasoningEffort}
+                onChange={(value) => setReasoningEffort(value as ReasoningEffort | 'auto')}
+                options={[
+                  {
+                    id: 'auto',
+                    label: t('settings.llmConfiguration.reasoningEffortAuto'),
+                    description: t('settings.llmConfiguration.reasoningEffortAutoDesc'),
+                  },
+                  { id: 'minimal', label: t('settings.llmConfiguration.reasoningEffortMinimal') },
+                  { id: 'low', label: t('settings.llmConfiguration.reasoningEffortLow') },
+                  { id: 'medium', label: t('settings.llmConfiguration.reasoningEffortMedium') },
+                  { id: 'high', label: t('settings.llmConfiguration.reasoningEffortHigh') },
+                ]}
+              />
 
               {/* Action Buttons */}
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <Button
                   onClick={handleSave}
                   disabled={status === 'saving' || status === 'loading'}
-                  className="flex-1"
+                  className="w-full sm:flex-1 bg-white text-black hover:bg-zinc-200 rounded-xl font-medium"
                 >
                   {status === 'saving' ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : status === 'saved' ? (
                     <>
-                      <CheckCircle2 className="w-4 h-4" />
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
                       {t('common.success')}
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4" />
+                      <Save className="w-4 h-4 mr-2" />
                       {t('common.save')}
                     </>
                   )}
@@ -925,12 +937,13 @@ export default function SettingsPage() {
                   variant="outline"
                   onClick={handleTestConnection}
                   disabled={status === 'testing' || status === 'saving'}
+                  className="w-full sm:flex-1 bg-zinc-800/50 border-white/10 text-zinc-200 hover:bg-zinc-700/50 rounded-xl"
                 >
                   {status === 'testing' ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <>
-                      <Activity className="w-4 h-4" />
+                      <Activity className="w-4 h-4 mr-2" />
                       {t('settings.llmConfiguration.testConnection')}
                     </>
                   )}
@@ -939,8 +952,8 @@ export default function SettingsPage() {
 
               {/* Error Message */}
               {error && (
-                <div className="border border-red-300 bg-red-50 p-3">
-                  <p className="text-xs text-red-600 font-mono break-words">
+                <div className="border border-red-500/20 bg-red-500/5 p-4 rounded-xl shadow-xl shadow-black/20">
+                  <p className="text-sm text-red-400 font-medium break-words">
                     {t('settings.llmConfiguration.errorPrefix', { error })}
                   </p>
                 </div>
@@ -949,58 +962,58 @@ export default function SettingsPage() {
               {/* Health Check Result */}
               {healthCheck && (
                 <div
-                  className={`border p-4 break-words ${
+                  className={`border p-4 sm:p-6 rounded-2xl break-words shadow-xl shadow-black/20 ${
                     healthCheck.healthy
-                      ? 'border-green-300 bg-green-50'
-                      : 'border-red-300 bg-red-50'
+                      ? 'border-emerald-500/20 bg-emerald-500/5'
+                      : 'border-red-500/20 bg-red-500/5'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     {healthCheck.healthy ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                      <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                     ) : (
                       <XCircle className="w-5 h-5 text-red-500" />
                     )}
-                    <span className="font-mono text-sm font-bold">
+                    <span className="text-base font-semibold text-zinc-100">
                       {healthCheck.healthy
                         ? t('settings.llmConfiguration.connectionSuccessful')
                         : t('settings.llmConfiguration.connectionFailed')}
                     </span>
                   </div>
-                  <p className="font-mono text-xs text-ink-soft">
+                  <p className="text-sm text-zinc-400 font-medium">
                     {t('settings.llmConfiguration.connectionDetails', {
                       provider: healthCheck.provider,
                       model: healthCheck.model,
                     })}
                   </p>
                   {healthCheckError && (
-                    <p className="font-mono text-xs text-red-600 mt-1 break-words">
+                    <p className="text-sm text-red-400 font-medium mt-2 break-words">
                       {healthCheckError}
                     </p>
                   )}
                   {healthCheckWarning && (
-                    <p className="font-mono text-xs text-amber-700 mt-1 break-words">
+                    <p className="text-sm text-amber-500/80 font-medium mt-2 break-words">
                       {healthCheckWarning}
                     </p>
                   )}
                   {healthDetailItems.length > 0 && (
-                    <div className="mt-3 space-y-3">
+                    <div className="mt-4 space-y-4">
                       {healthDetailItems.map((item) =>
                         item.key === 'reasoningContent' ? (
                           <details key={item.key} className="group">
-                            <summary className="cursor-pointer font-mono text-[10px] uppercase tracking-wider text-ink-soft hover:text-black">
+                            <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wider text-zinc-500 hover:text-zinc-300">
                               {item.label}
                             </summary>
-                            <pre className="mt-1 whitespace-pre-wrap break-words rounded-none border border-black bg-white p-3 text-xs text-ink-soft shadow-sw-sm">
+                            <pre className="mt-2 whitespace-pre-wrap break-words rounded-xl border border-white/5 bg-black/40 p-4 text-xs text-zinc-300 font-mono">
                               {item.value}
                             </pre>
                           </details>
                         ) : (
                           <div key={item.key}>
-                            <p className="font-mono text-[10px] uppercase tracking-wider text-ink-soft">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
                               {item.label}
                             </p>
-                            <pre className="mt-1 whitespace-pre-wrap break-words rounded-none border border-black bg-white p-3 text-xs text-ink-soft shadow-sw-sm">
+                            <pre className="mt-2 whitespace-pre-wrap break-words rounded-xl border border-white/5 bg-black/40 p-4 text-xs text-zinc-300 font-mono">
                               {item.value}
                             </pre>
                           </div>
@@ -1014,20 +1027,22 @@ export default function SettingsPage() {
           </section>
 
           {/* Content Generation Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-black/10 pb-2">
-              <Settings2 className="w-4 h-4" />
-              <h2 className="font-mono text-sm font-bold uppercase tracking-wider">
+          <section className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl shadow-black/50 space-y-6 sm:space-y-8">
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                <Settings2 className="w-5 h-5 text-zinc-300" />
+              </div>
+              <h2 className="text-xl font-medium tracking-wide text-zinc-100">
                 {t('settings.contentGeneration.title')}
               </h2>
             </div>
 
-            <div className="space-y-2">
-              <p className="text-sm text-ink-soft mb-4">
+            <div className="space-y-6">
+              <p className="text-sm text-zinc-400 font-medium mb-6">
                 {t('settings.contentGeneration.description')}
               </p>
 
-              <div className="space-y-3">
+              <div className="space-y-8">
                 <ToggleSwitch
                   checked={enableCoverLetter}
                   onCheckedChange={(checked) => {
@@ -1039,8 +1054,8 @@ export default function SettingsPage() {
                   disabled={featureConfigLoading}
                 />
                 {enableCoverLetter && (
-                  <div className="pl-6 space-y-2">
-                    <Label htmlFor="coverLetterPrompt">
+                  <div className="pl-6 space-y-4 border-l border-white/10 ml-2">
+                    <Label htmlFor="coverLetterPrompt" className="text-zinc-300">
                       {t('settings.contentGeneration.customPromptLabel')}
                     </Label>
                     <textarea
@@ -1049,25 +1064,26 @@ export default function SettingsPage() {
                       value={coverLetterPrompt}
                       onChange={(e) => setCoverLetterPrompt(e.target.value)}
                       placeholder={coverLetterDefault}
-                      className="w-full rounded-none border border-black bg-white p-3 font-mono text-xs break-words focus:outline-none focus:shadow-[4px_4px_0_0_#000]"
+                      className="w-full rounded-xl border border-white/10 bg-black/40 p-4 font-mono text-xs text-zinc-300 break-words focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors placeholder:text-zinc-700"
                     />
-                    <p className="text-xs text-steel-grey font-mono">
+                    <p className="text-sm text-zinc-500 font-medium">
                       {t('settings.contentGeneration.customPromptHelp')}
                     </p>
                     {featurePromptError?.field === 'cover_letter_prompt' && (
-                      <p className="text-xs text-red-600 font-mono break-words">
+                      <p className="text-sm text-red-400 font-medium break-words">
                         {t('settings.contentGeneration.customPromptErrorMissing', {
                           missing: featurePromptError.missing.join(', '),
                         })}
                       </p>
                     )}
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <Button
                         variant="outline"
                         onClick={() =>
                           handleFeaturePromptSave('cover_letter_prompt', coverLetterPrompt)
                         }
                         disabled={featurePromptSaving === 'cover_letter_prompt'}
+                        className="w-full sm:w-auto bg-white text-black hover:bg-zinc-200 border-none rounded-xl"
                       >
                         {featurePromptSaving === 'cover_letter_prompt' ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -1079,6 +1095,7 @@ export default function SettingsPage() {
                         variant="outline"
                         onClick={() => handleFeaturePromptSave('cover_letter_prompt', '')}
                         disabled={featurePromptSaving === 'cover_letter_prompt'}
+                        className="w-full sm:w-auto bg-zinc-800/50 border-white/10 text-zinc-200 hover:bg-zinc-700/50 rounded-xl"
                       >
                         {t('settings.contentGeneration.customPromptResetButton')}
                       </Button>
@@ -1096,8 +1113,8 @@ export default function SettingsPage() {
                   disabled={featureConfigLoading}
                 />
                 {enableOutreach && (
-                  <div className="pl-6 space-y-2">
-                    <Label htmlFor="outreachPrompt">
+                  <div className="pl-4 sm:pl-6 space-y-4 border-l border-white/10 ml-2">
+                    <Label htmlFor="outreachPrompt" className="text-zinc-300">
                       {t('settings.contentGeneration.customPromptLabel')}
                     </Label>
                     <textarea
@@ -1106,25 +1123,26 @@ export default function SettingsPage() {
                       value={outreachPrompt}
                       onChange={(e) => setOutreachPrompt(e.target.value)}
                       placeholder={outreachDefault}
-                      className="w-full rounded-none border border-black bg-white p-3 font-mono text-xs break-words focus:outline-none focus:shadow-[4px_4px_0_0_#000]"
+                      className="w-full rounded-xl border border-white/10 bg-black/40 p-4 font-mono text-xs text-zinc-300 break-words focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-500 transition-colors placeholder:text-zinc-700"
                     />
-                    <p className="text-xs text-steel-grey font-mono">
+                    <p className="text-sm text-zinc-500 font-medium">
                       {t('settings.contentGeneration.customPromptHelp')}
                     </p>
                     {featurePromptError?.field === 'outreach_message_prompt' && (
-                      <p className="text-xs text-red-600 font-mono break-words">
+                      <p className="text-sm text-red-400 font-medium break-words">
                         {t('settings.contentGeneration.customPromptErrorMissing', {
                           missing: featurePromptError.missing.join(', '),
                         })}
                       </p>
                     )}
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <Button
                         variant="outline"
                         onClick={() =>
                           handleFeaturePromptSave('outreach_message_prompt', outreachPrompt)
                         }
                         disabled={featurePromptSaving === 'outreach_message_prompt'}
+                        className="w-full sm:w-auto bg-white text-black hover:bg-zinc-200 border-none rounded-xl"
                       >
                         {featurePromptSaving === 'outreach_message_prompt' ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -1136,6 +1154,7 @@ export default function SettingsPage() {
                         variant="outline"
                         onClick={() => handleFeaturePromptSave('outreach_message_prompt', '')}
                         disabled={featurePromptSaving === 'outreach_message_prompt'}
+                        className="w-full sm:w-auto bg-zinc-800/50 border-white/10 text-zinc-200 hover:bg-zinc-700/50 rounded-xl"
                       >
                         {t('settings.contentGeneration.customPromptResetButton')}
                       </Button>
@@ -1144,7 +1163,7 @@ export default function SettingsPage() {
                 )}
               </div>
 
-              <div className="pt-4 border-t border-paper-tint">
+              <div className="pt-8 border-t border-white/5">
                 <Dropdown
                   options={localizedPromptOptions}
                   value={defaultPromptId}
@@ -1158,10 +1177,12 @@ export default function SettingsPage() {
           </section>
 
           {/* Language Settings Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-black/10 pb-2">
-              <Globe className="w-4 h-4" />
-              <h2 className="font-mono text-sm font-bold uppercase tracking-wider">
+          <section className="border border-white/5 bg-zinc-900/40 p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl shadow-black/50 space-y-6 sm:space-y-8">
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                <Globe className="w-5 h-5 text-zinc-300" />
+              </div>
+              <h2 className="text-xl font-medium tracking-wide text-zinc-100">
                 {t('settings.uiLanguage')} & {t('settings.contentLanguage')}
               </h2>
             </div>
@@ -1169,14 +1190,14 @@ export default function SettingsPage() {
             {/* UI Language */}
             <div className="space-y-4">
               <div>
-                <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink-soft mb-2">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                   {t('settings.uiLanguage')}
                 </h3>
-                <p className="text-sm text-ink-soft mb-3">{t('settings.uiLanguageDescription')}</p>
+                <p className="text-sm text-zinc-500 font-medium mb-4">{t('settings.uiLanguageDescription')}</p>
               </div>
 
               <div className="space-y-2">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {supportedLanguages.map((lang) => (
                     <button
                       key={`ui-${lang}`}
@@ -1192,12 +1213,12 @@ export default function SettingsPage() {
             </div>
 
             {/* Content Language */}
-            <div className="space-y-4 pt-4 border-t border-paper-tint">
+            <div className="space-y-4 pt-8 border-t border-white/5">
               <div>
-                <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-ink-soft mb-2">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-300 mb-2">
                   {t('settings.contentLanguage')}
                 </h3>
-                <p className="text-sm text-ink-soft mb-3">
+                <p className="text-sm text-zinc-500 font-medium mb-4">
                   {t('settings.contentLanguageDescription')}
                 </p>
               </div>
@@ -1220,26 +1241,28 @@ export default function SettingsPage() {
           </section>
 
           {/* Danger Zone */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 border-b border-red-200 pb-2">
-              <AlertTriangle className="w-4 h-4 text-red-600" />
-              <h2 className="font-mono text-sm font-bold uppercase tracking-wider text-red-600">
+          <section className="border border-red-500/20 bg-red-500/5 p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl shadow-black/50 space-y-6 sm:space-y-8">
+            <div className="flex items-center gap-3 border-b border-red-500/20 pb-4">
+              <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/20">
+                <AlertTriangle className="w-5 h-5 text-red-500/80" />
+              </div>
+              <h2 className="text-xl font-medium tracking-wide text-red-400">
                 {t('settings.dangerZone')}
               </h2>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-8">
               {/* Clear API Keys */}
-              <div className="border border-red-200 bg-red-50/50 p-6 space-y-4">
+              <div className="border border-red-500/20 bg-red-500/10 p-6 rounded-2xl space-y-6">
                 <div>
-                  <h3 className="font-bold text-sm text-red-900 mb-1">
+                  <h3 className="font-semibold text-red-300 mb-2">
                     {t('settings.clearApiKeys')}
                   </h3>
-                  <p className="text-xs text-red-700">{t('settings.clearApiKeysDescription')}</p>
+                  <p className="text-sm text-red-400/80 font-medium">{t('settings.clearApiKeysDescription')}</p>
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800 hover:border-red-300"
+                  className="w-full bg-transparent border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/40 rounded-xl"
                   onClick={() => setShowClearApiKeysDialog(true)}
                   disabled={isResetting}
                 >
@@ -1249,16 +1272,16 @@ export default function SettingsPage() {
               </div>
 
               {/* Reset Database */}
-              <div className="border border-red-200 bg-red-50/50 p-6 space-y-4">
+              <div className="border border-red-500/20 bg-red-500/10 p-6 rounded-2xl space-y-6">
                 <div>
-                  <h3 className="font-bold text-sm text-red-900 mb-1">
+                  <h3 className="font-semibold text-red-300 mb-2">
                     {t('settings.resetDatabase')}
                   </h3>
-                  <p className="text-xs text-red-700">{t('settings.resetDatabaseDescription')}</p>
+                  <p className="text-sm text-red-400/80 font-medium">{t('settings.resetDatabaseDescription')}</p>
                 </div>
                 <Button
                   variant="destructive"
-                  className="w-full"
+                  className="w-full bg-red-500/80 hover:bg-red-500 text-white rounded-xl"
                   onClick={() => setShowResetDatabaseDialog(true)}
                   disabled={isResetting}
                 >
@@ -1271,34 +1294,34 @@ export default function SettingsPage() {
         </div>
 
         {/* Footer */}
-        <div className="bg-secondary p-4 border-t border-black flex justify-between items-center">
-          <div className="flex items-center gap-2">
+        <div className="bg-zinc-900/40 backdrop-blur-2xl p-6 border border-white/5 shadow-2xl shadow-black/50 rounded-3xl flex justify-between items-center">
+          <div className="flex items-center gap-3">
             <Image
-              src="/logo.svg"
-              alt="Resume Matcher"
-              width={20}
-              height={20}
-              className="w-5 h-5"
+              src="/logo.png"
+              alt="Recro AI"
+              width={24}
+              height={24}
+              className="w-6 h-6 opacity-90"
             />
-            <span className="font-mono text-xs text-steel-grey">
+            <span className="text-sm font-medium tracking-wide text-zinc-500">
               {getVersionString().toUpperCase()}
             </span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {statusLoading ? (
               <>
-                <Loader2 className="w-3 h-3 animate-spin text-steel-grey" />
-                <span className="font-mono text-xs text-steel-grey">
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-500" />
+                <span className="text-sm font-medium text-zinc-500">
                   {t('settings.footer.status.checking')}
                 </span>
               </>
             ) : systemStatus ? (
               <>
                 <div
-                  className={`w-3 h-3 ${systemStatus.status === 'ready' ? 'bg-green-700' : 'bg-amber-500'}`}
+                  className={`w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor] ${systemStatus.status === 'ready' ? 'bg-emerald-500 text-emerald-500' : 'bg-amber-500 text-amber-500'}`}
                 ></div>
                 <span
-                  className={`font-mono text-xs font-bold ${systemStatus.status === 'ready' ? 'text-green-700' : 'text-amber-600'}`}
+                  className={`text-sm font-semibold tracking-wide ${systemStatus.status === 'ready' ? 'text-emerald-500' : 'text-amber-500'}`}
                 >
                   {systemStatus.status === 'ready'
                     ? t('settings.footer.status.ready')
@@ -1306,7 +1329,7 @@ export default function SettingsPage() {
                 </span>
               </>
             ) : (
-              <span className="font-mono text-xs text-steel-grey">
+              <span className="text-sm font-medium text-zinc-500">
                 {t('settings.footer.status.offline')}
               </span>
             )}

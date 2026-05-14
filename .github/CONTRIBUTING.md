@@ -1,6 +1,6 @@
-# Contributing to Resume-Matcher on GitHub
+# Contributing to Recro-AI on GitHub
 
-Thank you for taking the time to contribute to [Resume-Matcher](https://github.com/srbhr/Resume-Matcher).
+Thank you for taking the time to contribute to [Recro-AI](https://github.com/srbhr/Recro-AI).
 
 We want you to have a great experience making your first contribution.
 
@@ -42,13 +42,13 @@ Follow these steps to set up the environment and run the application.
 
 ## How to install
 
-1. Fork the repository [here](https://github.com/srbhr/Resume-Matcher/fork).
+1. Fork the repository [here](https://github.com/srbhr/Recro-AI/fork).
 
 2. Clone the forked repository.
 
    ```bash
-   git clone https://github.com/<YOUR-USERNAME>/Resume-Matcher.git
-   cd Resume-Matcher
+   git clone https://github.com/<YOUR-USERNAME>/Recro-AI.git
+   cd Recro-AI
    ```
 
 3. Create a Python Virtual Environment:
@@ -163,7 +163,7 @@ Follow these steps to set up the environment and run the application.
 
 ### Running the Web Application
 
-The full stack Next.js (React and FastAPI) web application allows users to interact with the Resume Matcher tool interactively via a web browser.
+The full stack Next.js (React and FastAPI) web application allows users to interact with the Recro AI tool interactively via a web browser.
 
 To run the full stack web application (frontend client and backend api servers), follow the instructions over on the [webapp README](/webapp/README.md) file.
 
@@ -194,14 +194,14 @@ Now, the pre-commit hooks will automatically run every time you commit your chan
 
 Pull Requests & Issues are not just welcomed, they're celebrated! Let's create together.
 
-🎉 Join our lively [Discord](https://dsc.gg/resume-matcher) community and discuss away!
+🎉 Join our lively [Discord](https://dsc.gg/recro-ai) community and discuss away!
 
 💡 Spot a problem? Create an issue!
 
-👩‍💻 Dive in and help resolve existing [issues](https://github.com/srbhr/Resume-Matcher/issues).
+👩‍💻 Dive in and help resolve existing [issues](https://github.com/srbhr/Recro-AI/issues).
 
-🔔 Share your thoughts in our [Discussions & Announcements](https://github.com/srbhr/Resume-Matcher/discussions).
+🔔 Share your thoughts in our [Discussions & Announcements](https://github.com/srbhr/Recro-AI/discussions).
 
-🚀 Explore and improve our [Landing Page](https://github.com/srbhr/website-for-resume-matcher). PRs always welcome!
+🚀 Explore and improve our [Landing Page](https://github.com/srbhr/website-for-recro-ai). PRs always welcome!
 
-📚 Contribute to the [Resume Matcher Docs](https://github.com/srbhr/Resume-Matcher-Docs) and help people get started with using the software.
+📚 Contribute to the [Recro AI Docs](https://github.com/srbhr/Recro-AI-Docs) and help people get started with using the software.

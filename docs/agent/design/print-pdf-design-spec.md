@@ -1,6 +1,6 @@
 # Print PDF Design Spec
 
-> Specifications for PDF rendering in Resume Matcher.
+> Specifications for PDF rendering in Recro AI.
 
 ## Page Sizes
 

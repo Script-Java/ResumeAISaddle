@@ -1,16 +1,16 @@
 <div align="center">
 
-[![Resume Matcher](assets/header.png)](https://www.resumematcher.fyi)
+[![Recro AI](assets/header.png)](https://www.recroai.fyi)
 
-# Resume Matcher
+# Recro AI
 
 [English](README.md) | [Español](README.es.md) | [简体中文](README.zh-CN.md) | **日本語**
 
-[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/resume-matcher) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://resumematcher.fyi) ✦ [𝙷𝚘𝚠 𝚝𝚘 𝙸𝚗𝚜𝚝𝚊𝚕𝚕](https://resumematcher.fyi/docs/installation) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝚂𝚙𝚘𝚗𝚜𝚘𝚛](#sponsor-resume-matcher) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/srbhrai) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/resume-matcher/) ✦ [𝙲𝚛𝚎𝚊𝚝𝚘𝚛](https://srbhr.com)
+[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/recro-ai) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://recroai.fyi) ✦ [𝙷𝚘𝚠 𝚝𝚘 𝙸𝚗𝚜𝚝𝚊𝚕𝚕](https://recroai.fyi/docs/installation) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝚂𝚙𝚘𝚗𝚜𝚘𝚛](#sponsor-recro-ai) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/srbhrai) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/recro-ai/) ✦ [𝙲𝚛𝚎𝚊𝚝𝚘𝚛](https://srbhr.com)
 
 求人ごとに最適化した履歴書を、AI の提案で作成できます。Ollama を使ってローカルで動かすことも、API 経由でお気に入りの LLM プロバイダに接続することも可能です。
 
-![Resume Matcher Demo](assets/Resume_Matcher_Demo_2.gif)
+![Recro AI Demo](assets/Resume_Matcher_Demo_2.gif)
 
 </div>
 
@@ -18,12 +18,12 @@
 
 <div align="center">
 
-![Stars](https://img.shields.io/github/stars/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
-![Apache 2.0](https://img.shields.io/github/license/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![Forks](https://img.shields.io/github/forks/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![version](https://img.shields.io/badge/Version-1.2%20Nightvision%20-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
+![Stars](https://img.shields.io/github/stars/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
+![Apache 2.0](https://img.shields.io/github/license/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![Forks](https://img.shields.io/github/forks/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![version](https://img.shields.io/badge/Version-1.2%20Nightvision%20-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
 
-[![Discord](https://img.shields.io/discord/1122069176962531400?labelColor=F0F0E8&logo=discord&logoColor=1d4ed8&style=for-the-badge&color=1d4ed8)](https://dsc.gg/resume-matcher) [![Website](https://img.shields.io/badge/website-Resume%20Matcher-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)](https://resumematcher.fyi) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Resume%20Matcher-FFF?labelColor=F0F0E8&logo=LinkedIn&style=for-the-badge&color=1d4ed8)](https://www.linkedin.com/company/resume-matcher/)
+[![Discord](https://img.shields.io/discord/1122069176962531400?labelColor=F0F0E8&logo=discord&logoColor=1d4ed8&style=for-the-badge&color=1d4ed8)](https://dsc.gg/recro-ai) [![Website](https://img.shields.io/badge/website-Resume%20Matcher-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)](https://recroai.fyi) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Resume%20Matcher-FFF?labelColor=F0F0E8&logo=LinkedIn&style=for-the-badge&color=1d4ed8)](https://www.linkedin.com/company/recro-ai/)
 
-<a href="https://trendshift.io/repositories/565" target="_blank"><img src="https://trendshift.io/api/badge/repositories/565" alt="srbhr%2FResume-Matcher | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/565" target="_blank"><img src="https://trendshift.io/api/badge/repositories/565" alt="srbhr%2FRecro-AI | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 ![Vercel OSS Program](https://vercel.com/oss/program-badge.svg)
 
@@ -31,11 +31,11 @@
 
 > \[!IMPORTANT]
 >
-> 本プロジェクトはアクティブに開発中です。新機能は継続的に追加され、コミュニティからのコントリビューションも歓迎しています。提案や機能要望があれば、GitHub に Issue を立てるか、[Discord](https://dsc.gg/resume-matcher) でご相談ください。
+> 本プロジェクトはアクティブに開発中です。新機能は継続的に追加され、コミュニティからのコントリビューションも歓迎しています。提案や機能要望があれば、GitHub に Issue を立てるか、[Discord](https://dsc.gg/recro-ai) でご相談ください。
 
 ## はじめに
 
-Resume Matcher は、まず「マスター履歴書」を作り、それを各求人応募向けに調整する形で動作します。インストール手順は：[インストール方法](#how-to-install)
+Recro AI は、まず「マスター履歴書」を作り、それを各求人応募向けに調整する形で動作します。インストール手順は：[インストール方法](#how-to-install)
 
 ### 仕組み
 
@@ -48,15 +48,15 @@ Resume Matcher は、まず「マスター履歴書」を作り、それを各�
 
 ### コミュニティ
 
-[![Discord](assets/resume_matcher_discord.png)](https://dsc.gg/resume-matcher)
+[![Discord](assets/resume_matcher_discord.png)](https://dsc.gg/recro-ai)
 
-ディスカッション、要望、サポートは [Discord](https://dsc.gg/resume-matcher) へ。
+ディスカッション、要望、サポートは [Discord](https://dsc.gg/recro-ai) へ。
 
-[![LinkedIn](assets/resume_matcher_linkedin.png)](https://www.linkedin.com/company/resume-matcher/)
+[![LinkedIn](assets/resume_matcher_linkedin.png)](https://www.linkedin.com/company/recro-ai/)
 
-最新情報は [LinkedIn](https://www.linkedin.com/company/resume-matcher/) でも発信しています。
+最新情報は [LinkedIn](https://www.linkedin.com/company/recro-ai/) でも発信しています。
 
-![Star Resume Matcher](assets/star_resume_matcher.png)
+![Star Recro AI](assets/star_resume_matcher.png)
 
 Star を付けていただけると開発の励みになります（リリース通知も受け取れます）。
 
@@ -64,22 +64,22 @@ Star を付けていただけると開発の励みになります（リリース
 
 ![sponsors](assets/sponsors.png)
 
-スポンサーの皆さまに感謝します。Resume Matcher が役立ったと感じたら、[**GitHub Sponsors**](https://github.com/sponsors/srbhr) での支援をご検討ください。継続的な開発と改善につながります。
+スポンサーの皆さまに感謝します。Recro AI が役立ったと感じたら、[**GitHub Sponsors**](https://github.com/sponsors/srbhr) での支援をご検討ください。継続的な開発と改善につながります。
 
 | Sponsor | Description |
 |---------|-------------|
-| [APIDECK](https://apideck.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | アプリを200以上のSaaSプラットフォーム（会計、HRIS、CRM、ファイルストレージ）に接続する単一のAPI。50回ではなく、1回の構築で統合を実現します。 🌐 [apideck.com](https://apideck.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Vercel](https://vercel.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Resume Matcher は Vercel OSS // Summer 2025 プログラムの一部です 🌐 [vercel.com](https://vercel.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Cubic.dev](https://cubic.dev?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Cubic は Resume Matcher に PR レビューを提供しています 🌐 [cubic.dev](https://cubic.dev?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Kilo Code](https://kilo.ai?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Kilo Code は Resume Matcher に AI コードレビューとコーディングクレジットを提供しています 🌐 [kilo.ai](https://kilo.ai?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
+| [APIDECK](https://apideck.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | アプリを200以上のSaaSプラットフォーム（会計、HRIS、CRM、ファイルストレージ）に接続する単一のAPI。50回ではなく、1回の構築で統合を実現します。 🌐 [apideck.com](https://apideck.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Vercel](https://vercel.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Recro AI は Vercel OSS // Summer 2025 プログラムの一部です 🌐 [vercel.com](https://vercel.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Cubic.dev](https://cubic.dev?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Cubic は Recro AI に PR レビューを提供しています 🌐 [cubic.dev](https://cubic.dev?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Kilo Code](https://kilo.ai?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Kilo Code は Recro AI に AI コードレビューとコーディングクレジットを提供しています 🌐 [kilo.ai](https://kilo.ai?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
 
 <a id="support-the-development-by-donating"></a>
 
-## Resume Matcher を支援する
+## Recro AI を支援する
 
 ![donate](assets/supporting_resume_matcher.png)
 
-スポンサーシップがプロジェクトにどのように役立つかについての詳細は、[Sponsorship Guide](https://resumematcher.fyi/docs/sponsoring) をご覧ください。ReadME およびウェブサイトにて特別に感謝の意を表します。
+スポンサーシップがプロジェクトにどのように役立つかについての詳細は、[Sponsorship Guide](https://recroai.fyi/docs/sponsoring) をご覧ください。ReadME およびウェブサイトにて特別に感謝の意を表します。
 
 | プラットフォーム | リンク |
 |------------------|--------|
@@ -88,7 +88,7 @@ Star を付けていただけると開発の励みになります（リリース
 
 ## 制作者ノート
 
-Resume Matcher をご覧いただきありがとうございます。つながりやコラボレーション、あるいは挨拶だけでも、お気軽にご連絡ください！
+Recro AI をご覧いただきありがとうございます。つながりやコラボレーション、あるいは挨拶だけでも、お気軽にご連絡ください！
 ~ **Saurabh Rai** ✨
 
 以下でフォローできます：
@@ -153,7 +153,7 @@ Resume Matcher をご覧いただきありがとうございます。つなが�
 
 ### ロードマップ
 
-提案や機能要望があれば、GitHub に Issue を立てるか、[Discord](https://dsc.gg/resume-matcher) でご相談ください。
+提案や機能要望があれば、GitHub に Issue を立てるか、[Discord](https://dsc.gg/recro-ai) でご相談ください。
 
 - キーワードの視覚的ハイライト
 - 定量的でインパクトのある内容を作る AI Canvas
@@ -163,7 +163,7 @@ Resume Matcher をご覧いただきありがとうございます。つなが�
 
 ## インストール方法
 
-![Installation](assets/how_to_install_resumematcher.png)
+![Installation](assets/how_to_install_recroai.png)
 
 詳細なセットアップ手順は **[SETUP.ja.md](SETUP.ja.md)** を参照してください（[English](SETUP.md) / [Español](SETUP.es.md) / [简体中文](SETUP.zh-CN.md) も利用できます）。
 
@@ -181,8 +181,8 @@ MacOS / WSL / Ubuntu で最も手早い手順：
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 
 # バックエンド（ターミナル 1）
 cd apps/backend
@@ -212,9 +212,9 @@ npm run dev
 ### Docker デプロイ
 
 ```bash
-docker pull srbhr/resume-matcher:latest
+docker pull srbhr/recro-ai:latest
 
-docker run srbhr/resume-matcher:latest
+docker run srbhr/recro-ai:latest
 ```
 
 <!-- 注：Docker ドキュメントは準備中です。現在は docker-compose.yml を参照してください -->
@@ -235,9 +235,9 @@ docker run srbhr/resume-matcher:latest
 
 ![how to contribute](assets/how_to_contribute.png)
 
-どなたでもコントリビュート歓迎です。開発者・デザイナー・ユーザーを問わず、協力してくれる方を募集しています。コントリビューター一覧は、公式サイトの [about ページ](https://resumematcher.fyi/about) と GitHub README に掲載されています。
+どなたでもコントリビュート歓迎です。開発者・デザイナー・ユーザーを問わず、協力してくれる方を募集しています。コントリビューター一覧は、公式サイトの [about ページ](https://recroai.fyi/about) と GitHub README に掲載されています。
 
-ロードマップも参考にしてください。提案や機能要望があれば、GitHub で Issue を作成し、[Discord](https://dsc.gg/resume-matcher) でも議論できます。
+ロードマップも参考にしてください。提案や機能要望があれば、GitHub で Issue を作成し、[Discord](https://dsc.gg/recro-ai) でも議論できます。
 
 <a id="contributors"></a>
 
@@ -245,8 +245,8 @@ docker run srbhr/resume-matcher:latest
 
 ![Contributors](assets/contributors.png)
 
-<a href="https://github.com/srbhr/Resume-Matcher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=srbhr/Resume-Matcher" />
+<a href="https://github.com/srbhr/Recro-AI/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=srbhr/Recro-AI" />
 </a>
 
 <br/>
@@ -254,11 +254,11 @@ docker run srbhr/resume-matcher:latest
 <details>
   <summary><kbd>Star の推移</kbd></summary>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=srbhr/resume-matcher&theme=dark&type=Date">
-    <img width="100%" src="https://api.star-history.com/svg?repos=srbhr/resume-matcher&theme=dark&type=Date">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=srbhr/recro-ai&theme=dark&type=Date">
+    <img width="100%" src="https://api.star-history.com/svg?repos=srbhr/recro-ai&theme=dark&type=Date">
   </picture>
 </details>
 
-## Resume Matcher は [Vercel Open Source Program](https://vercel.com/oss) の一部です
+## Recro AI は [Vercel Open Source Program](https://vercel.com/oss) の一部です
 
 ![Vercel OSS Program](https://vercel.com/oss/program-badge.svg)

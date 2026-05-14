@@ -63,29 +63,31 @@ export function DiffPreviewModal({
           }
         }}
       >
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col p-6 bg-background border-2 border-black shadow-sw-lg">
-          <DialogHeader className="border-b-2 border-black pb-4 bg-white -mx-6 -mt-6 px-6 pt-6">
-            <DialogTitle className="font-serif text-2xl font-bold uppercase tracking-tight">
+        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col p-0 bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 rounded-3xl">
+          <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-zinc-900/50">
+            <DialogTitle className="text-xl font-semibold tracking-tight text-zinc-100">
               {t('tailor.missingDiffDialog.title')}
             </DialogTitle>
           </DialogHeader>
 
-          <div className="mt-6 border-2 border-black bg-white p-4 font-mono text-xs text-ink-soft">
-            {t('tailor.missingDiffDialog.description')}
-          </div>
-          <div className="mt-3 flex items-center gap-2 font-mono text-xs text-amber-700">
-            <AlertTriangle className="w-4 h-4" />
-            <span>{t('tailor.missingDiffDialog.confirmLabel')}</span>
+          <div className="p-6 space-y-4 flex-1 overflow-auto">
+            <div className="border border-white/10 rounded-xl bg-zinc-950 p-4 font-mono text-xs text-zinc-400">
+              {t('tailor.missingDiffDialog.description')}
+            </div>
+            <div className="flex items-center gap-2 font-mono text-xs text-amber-500">
+              <AlertTriangle className="w-4 h-4" />
+              <span>{t('tailor.missingDiffDialog.confirmLabel')}</span>
+            </div>
           </div>
 
-          <div className="flex justify-end items-center gap-3 pt-4 border-t-2 border-black bg-white -mx-6 -mb-6 px-6 py-4">
-            <Button variant="outline" onClick={onClose} disabled={isConfirming} className="gap-2">
+          <div className="flex justify-end items-center gap-3 p-4 bg-zinc-900/50 border-t border-white/5">
+            <Button variant="outline" onClick={onClose} disabled={isConfirming} className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
               {t('common.cancel')}
             </Button>
-            <Button variant="warning" onClick={onConfirm} disabled={isConfirming} className="gap-2">
+            <Button onClick={onConfirm} disabled={isConfirming} className="rounded-xl bg-amber-500 hover:bg-amber-600 text-black">
               {isConfirming ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
                   {t('common.saving')}
                 </>
               ) : (
@@ -126,25 +128,26 @@ export function DiffPreviewModal({
         }
       }}
     >
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col p-6 bg-background border-2 border-black shadow-sw-lg">
-        <DialogHeader className="border-b-2 border-black pb-4 bg-white -mx-6 -mt-6 px-6 pt-6">
-          <DialogTitle className="font-serif text-2xl font-bold uppercase tracking-tight">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col p-0 bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 rounded-3xl">
+        <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-zinc-900/50">
+          <DialogTitle className="text-xl font-semibold tracking-tight text-zinc-100">
             {t('tailor.diffModal.title')}
           </DialogTitle>
-          <p className="font-mono text-xs text-ink-soft mt-2">
+          <p className="font-mono text-xs text-zinc-400 mt-2">
             {'// '}
             {t('tailor.diffModal.subtitle')}
           </p>
         </DialogHeader>
 
-        {/* Summary cards */}
-        <div className="border-2 border-black bg-white p-4 mt-4">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-3 h-3 bg-primary"></div>
-            <h3 className="font-mono text-sm font-bold uppercase tracking-wider">
-              {t('tailor.diffModal.summary')}
-            </h3>
-          </div>
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          {/* Summary cards */}
+          <div className="border border-white/10 rounded-2xl bg-zinc-950 p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+              <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-zinc-300">
+                {t('tailor.diffModal.summary')}
+              </h3>
+            </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             <StatCard
@@ -175,15 +178,15 @@ export function DiffPreviewModal({
           </div>
 
           {diffSummary.high_risk_changes > 0 && (
-            <div className="mt-4 border-2 border-warning bg-[#FFF7ED] p-3 flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
+            <div className="mt-4 border border-amber-500/30 rounded-xl bg-amber-500/10 p-4 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
               <div>
-                <p className="font-mono text-xs font-bold uppercase text-[#C2410C]">
+                <p className="font-mono text-xs font-bold uppercase text-amber-500">
                   {t('tailor.diffModal.warningTitle', {
                     count: diffSummary.high_risk_changes,
                   })}
                 </p>
-                <p className="font-mono text-xs text-[#C2410C] mt-1">
+                <p className="font-mono text-xs text-amber-400/80 mt-1">
                   {t('tailor.diffModal.warningMessage')}
                 </p>
               </div>
@@ -192,13 +195,13 @@ export function DiffPreviewModal({
         </div>
 
         {errorMessage && (
-          <div className="mt-4 border-2 border-red-600 bg-red-50 p-3 font-mono text-xs text-red-700">
+          <div className="mt-4 border border-red-500/30 rounded-xl bg-red-500/10 p-4 font-mono text-xs text-red-400">
             {errorMessage}
           </div>
         )}
 
         {/* Detailed changes list */}
-        <div className="flex-1 min-h-0 overflow-y-auto mt-4 space-y-4">
+        <div className="space-y-4">
           {/* Summary changes */}
           {summaryChanges.length > 0 && (
             <ChangeSection
@@ -298,20 +301,22 @@ export function DiffPreviewModal({
           )}
         </div>
 
+          </div>
+
         {/* Action buttons */}
-        <div className="flex justify-between items-center pt-4 border-t-2 border-black bg-white -mx-6 -mb-6 px-6 py-4">
-          <Button variant="outline" onClick={onReject} disabled={isConfirming} className="gap-2">
+        <div className="flex justify-between items-center p-4 bg-zinc-900/50 border-t border-white/5">
+          <Button variant="outline" onClick={onReject} disabled={isConfirming} className="gap-2 rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
             <X className="w-4 h-4" />
             {t('tailor.diffModal.rejectButton')}
           </Button>
           <div className="flex items-center gap-3">
             {isConfirming && elapsed > 0 && (
-              <span className="font-mono text-xs text-steel-grey">{elapsed}s</span>
+              <span className="font-mono text-xs text-zinc-500">{elapsed}s</span>
             )}
             <Button
               onClick={onConfirm}
               disabled={isConfirming}
-              className="gap-2 bg-success hover:bg-green-800"
+              className="gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black"
             >
               {isConfirming ? (
                 <>
@@ -341,16 +346,16 @@ interface StatCardProps {
 
 function StatCard({ label, value, variant }: StatCardProps) {
   const colors = {
-    success: 'border-success bg-[#F0FDF4] text-success',
-    warning: 'border-warning bg-[#FFF7ED] text-warning',
-    danger: 'border-destructive bg-[#FEF2F2] text-destructive',
-    info: 'border-primary bg-[#EFF6FF] text-primary',
+    success: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400',
+    warning: 'border-amber-500/30 bg-amber-500/10 text-amber-400',
+    danger: 'border-red-500/30 bg-red-500/10 text-red-400',
+    info: 'border-blue-500/30 bg-blue-500/10 text-blue-400',
   };
 
   return (
-    <div className={`border-2 p-3 ${colors[variant]}`}>
+    <div className={`border rounded-xl p-4 ${colors[variant]}`}>
       <div className="font-mono text-2xl font-bold">{value}</div>
-      <div className="font-mono text-xs uppercase tracking-wider mt-1">{label}</div>
+      <div className="font-mono text-xs uppercase tracking-wider mt-1 opacity-80">{label}</div>
     </div>
   );
 }
@@ -366,20 +371,20 @@ interface ChangeSectionProps {
 
 function ChangeSection({ title, count, isExpanded, onToggle, children }: ChangeSectionProps) {
   return (
-    <div className="border-2 border-black bg-white">
+    <div className="border border-white/10 rounded-xl bg-zinc-950 overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-3 hover:bg-paper-tint"
+        className="w-full flex items-center justify-between p-4 hover:bg-zinc-900 transition-colors"
       >
         <div className="flex items-center gap-2">
-          {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-          <span className="font-mono text-sm font-bold uppercase tracking-wider">
+          {isExpanded ? <ChevronDown className="w-4 h-4 text-zinc-400" /> : <ChevronRight className="w-4 h-4 text-zinc-400" />}
+          <span className="font-mono text-sm font-bold uppercase tracking-wider text-zinc-200">
             {title} ({count})
           </span>
         </div>
       </button>
 
-      {isExpanded && <div className="border-t-2 border-black p-4 space-y-3">{children}</div>}
+      {isExpanded && <div className="border-t border-white/10 p-4 space-y-3 bg-zinc-900/20">{children}</div>}
     </div>
   );
 }
@@ -390,20 +395,16 @@ interface ChangeItemProps {
 }
 
 function ChangeItem({ change }: ChangeItemProps) {
-  // Background tint + leading glyph instead of left-stripe borders.
-  // Side-stripe borders are an impeccable absolute_ban (BAN 1) — the most
-  // overused dashboard "design touch". The leading +/-/~ glyph carries the
-  // semantic load and the bg tint reinforces it.
   const typeBackgrounds = {
-    added: 'bg-[#F0FDF4]',
-    removed: 'bg-[#FEF2F2]',
-    modified: 'bg-[#EFF6FF]',
+    added: 'bg-emerald-500/10 border-emerald-500/20',
+    removed: 'bg-red-500/10 border-red-500/20',
+    modified: 'bg-blue-500/10 border-blue-500/20',
   };
 
   const typeGlyphColors = {
-    added: 'text-success',
-    removed: 'text-destructive',
-    modified: 'text-primary',
+    added: 'text-emerald-500',
+    removed: 'text-red-500',
+    modified: 'text-blue-500',
   };
 
   const typeLabels = {
@@ -413,26 +414,26 @@ function ChangeItem({ change }: ChangeItemProps) {
   };
 
   return (
-    <div className={`p-3 border border-black ${typeBackgrounds[change.change_type]}`}>
-      <div className="flex items-start gap-2">
+    <div className={`p-4 rounded-lg border ${typeBackgrounds[change.change_type]}`}>
+      <div className="flex items-start gap-3">
         <span
-          className={`font-mono text-base font-bold uppercase tracking-wider ${typeGlyphColors[change.change_type]}`}
+          className={`font-mono text-base font-bold uppercase tracking-wider mt-0.5 ${typeGlyphColors[change.change_type]}`}
           aria-hidden="true"
         >
           {typeLabels[change.change_type]}
         </span>
         <div className="flex-1">
           {change.original_value && (
-            <div className="line-through text-destructive font-mono text-sm mb-1">
+            <div className="line-through text-red-400/80 font-mono text-sm mb-1">
               {change.original_value}
             </div>
           )}
           {change.new_value && (
-            <div className="text-ink-soft font-mono text-sm">{change.new_value}</div>
+            <div className="text-zinc-300 font-mono text-sm">{change.new_value}</div>
           )}
         </div>
         {change.change_type === 'added' && change.confidence === 'high' && (
-          <AlertTriangle className="w-4 h-4 text-warning shrink-0" />
+          <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
         )}
       </div>
     </div>

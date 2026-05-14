@@ -1,4 +1,4 @@
-# CLAUDE.md - Resume Matcher
+# CLAUDE.md - Recro AI
 
 > **Context file for Claude Code.** Full documentation at [docs/agent/README.md](../docs/agent/README.md).
 
@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-Resume Matcher is an AI-powered application for tailoring resumes to job descriptions.
+Recro AI is an AI-powered application for tailoring resumes to job descriptions.
 
 | Layer | Stack |
 |-------|-------|

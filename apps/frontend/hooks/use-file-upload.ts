@@ -226,7 +226,8 @@ export const useFileUpload = (
       markUploadStarted();
 
       try {
-        const response = await fetch(uploadUrl, {
+        const { apiFetch } = await import('@/lib/api/client');
+        const response = await apiFetch(uploadUrl, {
           method: 'POST',
           body: formData,
         });

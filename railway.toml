@@ -1,0 +1,29 @@
+# Railway deployment configuration for Recro AI
+# Docs: https://docs.railway.app/reference/config-as-code
+
+[build]
+# Use the existing multi-stage Dockerfile (builds frontend + backend together)
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+# The Docker image exposes port 3000 (Next.js frontend)
+# The FastAPI backend runs internally on 8000, proxied at /api
+startCommand = "/app/start.sh"
+healthcheckPath = "/api/v1/health"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+
+# -----------------------------------------------
+# Required environment variables — set these in
+# your Railway project's Variables panel:
+# -----------------------------------------------
+# FRONTEND_BASE_URL   = https://your-app.railway.app   (your Railway public URL)
+# LOG_LEVEL           = INFO
+# LOG_LLM             = WARNING
+#
+# Optional (you can also set these via the /settings UI):
+# LLM_PROVIDER        = openai | anthropic | gemini | deepseek | openrouter | ollama
+# LLM_MODEL           = gpt-4o-mini (or any model for your provider)
+# LLM_API_KEY         = sk-...

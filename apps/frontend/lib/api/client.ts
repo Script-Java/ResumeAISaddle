@@ -61,8 +61,36 @@ export async function apiFetch(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
 
+  // Apply Supabase authentication token if on the client
+  let finalHeaders = options?.headers ? new Headers(options.headers) : new Headers();
+  
+  if (typeof window !== 'undefined') {
+    try {
+      // Lazy load to avoid Next.js complaining about missing browser APIs on the server
+      const { createClient } = require('@/utils/supabase/client');
+      const supabase = createClient();
+      // Synchronous token extraction isn't officially supported by standard ssr auth,
+      // but in the browser we can just let Supabase fetch it asynchronously if needed,
+      // however fetch is async anyway, so we can await it.
+      const getAuth = async () => {
+         const { data } = await supabase.auth.getSession();
+         return data.session?.access_token;
+      };
+      const token = await getAuth();
+      if (token) {
+        finalHeaders.set('Authorization', `Bearer ${token}`);
+      }
+    } catch (e) {
+      console.warn("Failed to attach auth token", e);
+    }
+  }
+
   try {
-    return await fetch(url, { ...options, signal: controller.signal });
+    return await fetch(url, { 
+        ...options, 
+        headers: finalHeaders,
+        signal: controller.signal 
+    });
   } finally {
     clearTimeout(timer);
   }

@@ -1,8 +1,8 @@
-# Resume Matcher セットアップガイド
+# Recro AI セットアップガイド
 
 [English](SETUP.md) | [Español](SETUP.es.md) | [简体中文](SETUP.zh-CN.md) | [**日本語**](SETUP.ja.md)
 
-ようこそ！このガイドでは、ローカル環境で Resume Matcher をセットアップする手順を説明します。開発に参加したい方も、手元でアプリを動かしたい方も、この手順で始められます。
+ようこそ！このガイドでは、ローカル環境で Recro AI をセットアップする手順を説明します。開発に参加したい方も、手元でアプリを動かしたい方も、この手順で始められます。
 
 ---
 
@@ -41,7 +41,7 @@
 
 ### uv のインストール（Python パッケージマネージャ）
 
-Resume Matcher は Python 依存関係の管理に `uv` を使用します。インストール方法：
+Recro AI は Python 依存関係の管理に `uv` を使用します。インストール方法：
 
 ```bash
 # macOS/Linux
@@ -63,8 +63,8 @@ pip install uv
 
 ```bash
 # 1. リポジトリをクローン
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 
 # 2. バックエンド起動（ターミナル 1）
 cd apps/backend
@@ -93,8 +93,8 @@ npm run dev                  # 開発サーバを起動
 まずはコードを取得します：
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 ```
 
 <a id="2-backend-setup"></a>
@@ -199,14 +199,14 @@ npm run dev
 - Local:        http://localhost:3000
 ```
 
-ブラウザで **<http://localhost:3000>** を開くと、Resume Matcher のダッシュボードが表示されます。
+ブラウザで **<http://localhost:3000>** を開くと、Recro AI のダッシュボードが表示されます。
 
 ---
 
 <a id="configuring-your-ai-provider"></a>
 ## AI プロバイダの設定
 
-Resume Matcher は複数の AI プロバイダに対応しています。アプリ内の Settings ページ、またはバックエンドの `.env` を編集して設定できます。
+Recro AI は複数の AI プロバイダに対応しています。アプリ内の Settings ページ、またはバックエンドの `.env` を編集して設定できます。
 
 <a id="option-a-cloud-providers"></a>
 ### オプション A: クラウドプロバイダ
@@ -269,7 +269,7 @@ ollama serve
 <a id="docker-deployment"></a>
 ## Docker デプロイ
 
-コンテナで動かしたい場合、Resume Matcher は Docker に対応しています。
+コンテナで動かしたい場合、Recro AI は Docker に対応しています。
 
 ### Docker Compose を使う（推奨）
 
@@ -371,7 +371,7 @@ npm run dev -- -p 3001
 
 ### データベース管理
 
-Resume Matcher は TinyDB（JSON ファイル保存）を使用します。データは `apps/backend/data/` にあります：
+Recro AI は TinyDB（JSON ファイル保存）を使用します。データは `apps/backend/data/` にあります：
 
 ```bash
 # DB ファイルを見る
@@ -453,7 +453,7 @@ CORS_ORIGINS=["http://localhost:3001", "http://127.0.0.1:3001"]
 ## プロジェクト構成
 
 ```text
-Resume-Matcher/
+Recro-AI/
 ├─ apps/
 │  ├─ backend/                 # Python FastAPI backend
 │  │  ├─ app/
@@ -487,8 +487,8 @@ Resume-Matcher/
 
 困ったときは次を参照してください：
 
-- **Discord:** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - 質問・議論に活発です
-- **GitHub Issues:** [Issue を作成](https://github.com/srbhr/Resume-Matcher/issues)（バグ報告や要望）
+- **Discord:** [dsc.gg/recro-ai](https://dsc.gg/recro-ai) - 質問・議論に活発です
+- **GitHub Issues:** [Issue を作成](https://github.com/srbhr/Recro-AI/issues)（バグ報告や要望）
 - **ドキュメント:** 詳細は [docs/agent/](docs/agent/) を参照
 
 ### 参考ドキュメント
@@ -501,5 +501,5 @@ Resume-Matcher/
 
 ---
 
-楽しい履歴書づくりを！Resume Matcher が役立ったら、[リポジトリに Star](https://github.com/srbhr/Resume-Matcher) と [Discord 参加](https://dsc.gg/resume-matcher) をぜひ。
+楽しい履歴書づくりを！Recro AI が役立ったら、[リポジトリに Star](https://github.com/srbhr/Recro-AI) と [Discord 参加](https://dsc.gg/recro-ai) をぜひ。
 

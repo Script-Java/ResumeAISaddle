@@ -38,8 +38,19 @@ interface CoverLetterData {
 }
 
 async function fetchCoverLetterData(resumeId: string): Promise<CoverLetterData> {
+  const { cookies } = await import('next/headers');
+  const { createClient } = await import('@/utils/supabase/server');
+  
+  const cookieStore = await cookies();
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token || '';
+
   const res = await fetch(`${API_BASE}/resumes?resume_id=${encodeURIComponent(resumeId)}`, {
     cache: 'no-store',
+    headers: {
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+    }
   });
   if (!res.ok) {
     throw new Error(`Failed to load resume (status ${res.status}).`);

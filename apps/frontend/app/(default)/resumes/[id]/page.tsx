@@ -20,6 +20,7 @@ import { useTranslations } from '@/lib/i18n';
 import { withLocalizedDefaultSections } from '@/lib/utils/section-helpers';
 import { useLanguage } from '@/lib/context/language-context';
 import { downloadBlobAsFile, openUrlInNewTab, sanitizeFilename } from '@/lib/utils/download';
+import toast from 'react-hot-toast';
 
 type ProcessingStatus = 'pending' | 'processing' | 'ready' | 'failed';
 
@@ -176,7 +177,7 @@ export default function ResumeViewerPage() {
         const fallbackUrl = getResumePdfUrl(resumeId, undefined, uiLanguage);
         const didOpen = openUrlInNewTab(fallbackUrl);
         if (!didOpen) {
-          alert(t('common.popupBlocked', { url: fallbackUrl }));
+          toast.error(t('common.popupBlocked', { url: fallbackUrl }), { duration: 6000 });
         }
         return;
       }
@@ -215,9 +216,9 @@ export default function ResumeViewerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-700 mb-4" />
-        <p className="font-mono text-sm font-bold uppercase text-blue-700">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950">
+        <Loader2 className="w-10 h-10 animate-spin text-emerald-500 mb-4" />
+        <p className="font-mono text-sm font-bold uppercase text-emerald-500">
           {t('resumeViewer.loading')}
         </p>
       </div>
@@ -229,28 +230,28 @@ export default function ResumeViewerPage() {
     const isFailed = processingStatus === 'failed';
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 p-4">
         <div
-          className={`border p-6 text-center max-w-md shadow-sw-default ${
+          className={`border p-6 text-center max-w-md rounded-3xl backdrop-blur-xl shadow-2xl ${
             isProcessing
-              ? 'bg-blue-50 border-blue-200'
+              ? 'bg-blue-500/10 border-blue-500/30 shadow-blue-900/20'
               : isFailed
-                ? 'bg-orange-50 border-orange-200'
-                : 'bg-red-50 border-red-200'
+                ? 'bg-orange-500/10 border-orange-500/30 shadow-orange-900/20'
+                : 'bg-red-500/10 border-red-500/30 shadow-red-900/20'
           }`}
         >
           <div className="flex justify-center mb-4">
             {isProcessing ? (
-              <Loader2 className="w-8 h-8 animate-spin text-blue-700" />
+              <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
             ) : isFailed ? (
-              <AlertCircle className="w-8 h-8 text-orange-600" />
+              <AlertCircle className="w-8 h-8 text-orange-400" />
             ) : (
-              <AlertCircle className="w-8 h-8 text-red-600" />
+              <AlertCircle className="w-8 h-8 text-red-400" />
             )}
           </div>
           <p
             className={`font-bold mb-4 ${
-              isProcessing ? 'text-blue-700' : isFailed ? 'text-orange-700' : 'text-red-700'
+              isProcessing ? 'text-blue-400' : isFailed ? 'text-orange-400' : 'text-red-400'
             }`}
           >
             {error || t('resumeViewer.resumeNotFound')}
@@ -258,7 +259,7 @@ export default function ResumeViewerPage() {
           <div className="flex flex-col gap-2">
             {isFailed && (
               <>
-                <Button onClick={handleRetryProcessing} disabled={isRetrying}>
+                <Button className="rounded-xl bg-zinc-800 text-zinc-200 hover:bg-zinc-700 border border-white/10" onClick={handleRetryProcessing} disabled={isRetrying}>
                   {isRetrying ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -268,12 +269,12 @@ export default function ResumeViewerPage() {
                     t('resumeViewer.retryProcessing')
                   )}
                 </Button>
-                <Button variant="destructive" onClick={() => setShowDeleteDialog(true)}>
+                <Button variant="destructive" className="rounded-xl" onClick={() => setShowDeleteDialog(true)}>
                   {t('resumeViewer.deleteAndStartOver')}
                 </Button>
               </>
             )}
-            <Button variant="outline" onClick={() => router.push('/dashboard')}>
+            <Button variant="outline" className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100" onClick={() => router.push('/dashboard')}>
               {t('resumeViewer.returnToDashboard')}
             </Button>
           </div>
@@ -283,27 +284,27 @@ export default function ResumeViewerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4 md:px-8 overflow-y-auto">
+    <div className="min-h-screen bg-zinc-950 py-12 px-4 md:px-8 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Header Actions */}
         <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 no-print">
-          <Button variant="outline" onClick={() => router.push('/dashboard')}>
+          <Button variant="outline" className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100" onClick={() => router.push('/dashboard')}>
             <ArrowLeft className="w-4 h-4" />
             {t('nav.backToDashboard')}
           </Button>
 
           <div className="flex gap-3">
             {isMasterResume && (
-              <Button onClick={() => setShowEnrichmentModal(true)} className="gap-2">
+              <Button onClick={() => setShowEnrichmentModal(true)} className="gap-2 rounded-xl bg-zinc-800 text-zinc-200 hover:bg-zinc-700 border border-white/10">
                 <Sparkles className="w-4 h-4" />
                 {t('resumeViewer.enhanceResume')}
               </Button>
             )}
-            <Button variant="outline" onClick={handleEdit}>
+            <Button variant="outline" className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100" onClick={handleEdit}>
               <Edit className="w-4 h-4" />
               {t('dashboard.editResume')}
             </Button>
-            <Button variant="success" onClick={handleDownload} disabled={isDownloading}>
+            <Button className="rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-bold" onClick={handleDownload} disabled={isDownloading}>
               <Download className="w-4 h-4" />
               {isDownloading ? t('common.generating') : t('resumeViewer.downloadResume')}
             </Button>
@@ -323,7 +324,7 @@ export default function ResumeViewerPage() {
                 autoFocus
                 maxLength={80}
                 placeholder={t('resumeViewer.titlePlaceholder')}
-                className="font-serif text-2xl font-bold border-b-2 border-black bg-transparent outline-none w-full max-w-xl px-0 py-1"
+                className="text-2xl font-bold tracking-tight border-b-2 border-zinc-700 focus:border-emerald-500 bg-transparent text-zinc-100 outline-none w-full max-w-xl px-0 py-1"
               />
             ) : (
               <button
@@ -334,12 +335,12 @@ export default function ResumeViewerPage() {
                 className="group flex items-center gap-2 cursor-pointer bg-transparent border-none p-0"
               >
                 <h2
-                  className={`font-serif text-2xl font-bold border-b-2 border-transparent group-hover:border-black transition-colors ${!resumeTitle ? 'text-steel-grey' : ''}`}
+                  className={`text-2xl font-bold tracking-tight border-b-2 border-transparent group-hover:border-zinc-700 transition-colors ${!resumeTitle ? 'text-zinc-500' : 'text-zinc-100'}`}
                 >
                   {resumeTitle || t('resumeViewer.titlePlaceholder')}
                 </h2>
                 <Pencil
-                  className={`w-4 h-4 transition-opacity ${resumeTitle ? 'opacity-0 group-hover:opacity-60' : 'opacity-40 group-hover:opacity-60'}`}
+                  className={`w-4 h-4 transition-opacity ${resumeTitle ? 'opacity-0 group-hover:opacity-60 text-zinc-400' : 'opacity-40 group-hover:opacity-60 text-zinc-400'}`}
                 />
               </button>
             )}
@@ -374,7 +375,7 @@ export default function ResumeViewerPage() {
         </div>
 
         <div className="flex justify-end pt-4 no-print">
-          <Button variant="destructive" onClick={() => setShowDeleteDialog(true)}>
+          <Button variant="destructive" className="rounded-xl" onClick={() => setShowDeleteDialog(true)}>
             {isMasterResume
               ? t('confirmations.deleteMasterResumeTitle')
               : t('dashboard.deleteResume')}

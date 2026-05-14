@@ -1,8 +1,8 @@
 services:
-  resume-matcher:
-    image: ghcr.io/srbhr/resume-matcher
+  recro-ai:
+    image: ghcr.io/srbhr/recro-ai
     build: .
-    container_name: resume-matcher
+    container_name: recro-ai
     ports:
       - "${PORT:-3000}:3000"
     volumes:

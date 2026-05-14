@@ -66,18 +66,18 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-[400px] flex flex-col items-center justify-center p-8 bg-background">
-          <div className="max-w-md w-full bg-white border border-black shadow-sw-default p-8">
+        <div className="min-h-[400px] flex flex-col items-center justify-center p-8 bg-zinc-950">
+          <div className="max-w-md w-full rounded-3xl border border-white/10 bg-zinc-900/50 backdrop-blur-xl shadow-2xl shadow-black/50 p-8">
             <div className="flex items-center gap-3 mb-4">
-              <AlertTriangle className="w-8 h-8 text-red-600" />
-              <h2 className="font-serif text-2xl font-bold uppercase">{strings.title}</h2>
+              <AlertTriangle className="w-8 h-8 text-red-500" />
+              <h2 className="text-2xl font-semibold tracking-tight text-zinc-100">{strings.title}</h2>
             </div>
 
-            <p className="text-ink-soft mb-4 font-mono text-sm">{strings.description}</p>
+            <p className="text-zinc-400 mb-4 text-sm">{strings.description}</p>
 
             {process.env.NODE_ENV === 'development' && this.state.error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-none">
-                <p className="font-mono text-xs text-red-700 break-all">
+              <div className="mb-4 p-3 bg-red-950/30 border border-red-900/50 rounded-xl">
+                <p className="font-mono text-xs text-red-400 break-all">
                   {this.state.error.message}
                 </p>
               </div>
@@ -87,13 +87,13 @@ export class ErrorBoundary extends Component<Props, State> {
               <Button
                 onClick={this.handleReset}
                 variant="outline"
-                className="flex-1 border-black rounded-none shadow-sw-sm hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none transition-all"
+                className="flex-1 bg-transparent border-white/10 text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100"
               >
                 {strings.tryAgain}
               </Button>
               <Button
                 onClick={this.handleReload}
-                className="flex-1 bg-blue-700 hover:bg-blue-800 text-white rounded-none border border-black shadow-sw-sm hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-none transition-all"
+                className="flex-1 bg-zinc-100 text-zinc-900 hover:bg-white border-0 shadow-[0_0_15px_rgba(255,255,255,0.1)]"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 {strings.reloadPage}

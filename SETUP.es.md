@@ -1,8 +1,8 @@
-# Guía de configuración de Resume Matcher
+# Guía de configuración de Recro AI
 
 [English](SETUP.md) | [**Español**](SETUP.es.md) | [简体中文](SETUP.zh-CN.md) | [日本語](SETUP.ja.md)
 
-¡Bienvenido! Esta guía te acompaña para configurar Resume Matcher en tu máquina local. Tanto si eres desarrollador y quieres contribuir como si solo quieres ejecutarlo localmente, aquí tienes todo lo necesario.
+¡Bienvenido! Esta guía te acompaña para configurar Recro AI en tu máquina local. Tanto si eres desarrollador y quieres contribuir como si solo quieres ejecutarlo localmente, aquí tienes todo lo necesario.
 
 ---
 
@@ -41,7 +41,7 @@ Antes de empezar, asegúrate de tener lo siguiente instalado en tu sistema:
 
 ### Instalar uv (gestor de paquetes de Python)
 
-Resume Matcher usa `uv` para una gestión de dependencias de Python rápida y fiable. Instálalo con:
+Recro AI usa `uv` para una gestión de dependencias de Python rápida y fiable. Instálalo con:
 
 ```bash
 # macOS/Linux
@@ -63,8 +63,8 @@ Si ya estás familiarizado con herramientas de desarrollo y quieres arrancar rá
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 
 # 2. Inicia el backend (Terminal 1)
 cd apps/backend
@@ -93,8 +93,8 @@ Abre **<http://localhost:3000>** en el navegador y listo.
 Primero, trae el código a tu máquina:
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 ```
 
 <a id="2-backend-setup"></a>
@@ -199,14 +199,14 @@ Deberías ver:
 - Local:        http://localhost:3000
 ```
 
-Abre **<http://localhost:3000>** en el navegador. Deberías ver el panel de Resume Matcher.
+Abre **<http://localhost:3000>** en el navegador. Deberías ver el panel de Recro AI.
 
 ---
 
 <a id="configuring-your-ai-provider"></a>
 ## Configurar tu proveedor de IA
 
-Resume Matcher admite múltiples proveedores de IA. Puedes configurarlo desde la página de Settings en la app o editando el archivo `.env` del backend.
+Recro AI admite múltiples proveedores de IA. Puedes configurarlo desde la página de Settings en la app o editando el archivo `.env` del backend.
 
 <a id="option-a-cloud-providers"></a>
 ### Opción A: Proveedores en la nube
@@ -269,7 +269,7 @@ Normalmente Ollama se inicia automáticamente tras la instalación.
 <a id="docker-deployment"></a>
 ## Despliegue con Docker
 
-¿Prefieres un despliegue en contenedor? Resume Matcher incluye soporte para Docker.
+¿Prefieres un despliegue en contenedor? Recro AI incluye soporte para Docker.
 
 ### Usando Docker Compose (recomendado)
 
@@ -371,7 +371,7 @@ npm run dev -- -p 3001
 
 ### Gestión de base de datos
 
-Resume Matcher usa TinyDB (almacenamiento en archivos JSON). Todos los datos están en `apps/backend/data/`:
+Recro AI usa TinyDB (almacenamiento en archivos JSON). Todos los datos están en `apps/backend/data/`:
 
 ```bash
 # Ver archivos de la base de datos
@@ -453,7 +453,7 @@ CORS_ORIGINS=["http://localhost:3001", "http://127.0.0.1:3001"]
 ## Estructura del proyecto
 
 ```text
-Resume-Matcher/
+Recro-AI/
 ├─ apps/
 │  ├─ backend/                 # Python FastAPI backend
 │  │  ├─ app/
@@ -487,8 +487,8 @@ Resume-Matcher/
 
 ¿Atascado? Estas son tus opciones:
 
-- **Comunidad de Discord:** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - Comunidad activa para preguntas y discusiones
-- **Issues de GitHub:** [Abrir un issue](https://github.com/srbhr/Resume-Matcher/issues) para bugs o solicitudes de funcionalidades
+- **Comunidad de Discord:** [dsc.gg/recro-ai](https://dsc.gg/recro-ai) - Comunidad activa para preguntas y discusiones
+- **Issues de GitHub:** [Abrir un issue](https://github.com/srbhr/Recro-AI/issues) para bugs o solicitudes de funcionalidades
 - **Documentación:** revisa la carpeta [docs/agent/](docs/agent/) para guías detalladas
 
 ### Documentación útil
@@ -501,5 +501,5 @@ Resume-Matcher/
 
 ---
 
-¡Feliz creación de currículums! Si Resume Matcher te resulta útil, considera [darle una estrella al repo](https://github.com/srbhr/Resume-Matcher) y [unirte a nuestro Discord](https://dsc.gg/resume-matcher).
+¡Feliz creación de currículums! Si Recro AI te resulta útil, considera [darle una estrella al repo](https://github.com/srbhr/Recro-AI) y [unirte a nuestro Discord](https://dsc.gg/recro-ai).
 

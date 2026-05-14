@@ -83,12 +83,12 @@ export const AddSectionDialog: React.FC<AddSectionDialogProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] p-0 gap-0 rounded-none">
-        <DialogHeader className="p-6 pb-4 border-b border-black">
-          <DialogTitle className="font-serif text-xl font-bold uppercase tracking-tight">
+      <DialogContent className="sm:max-w-[500px] bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 p-0 gap-0 rounded-3xl overflow-hidden">
+        <DialogHeader className="p-6 pb-4 border-b border-white/5 bg-zinc-900/50">
+          <DialogTitle className="text-xl font-semibold tracking-tight text-zinc-100">
             {t('builder.customSections.dialogTitle')}
           </DialogTitle>
-          <DialogDescription className="font-mono text-xs text-ink-soft mt-2">
+          <DialogDescription className="font-mono text-xs text-zinc-400 mt-2">
             {t('builder.customSections.dialogDescription')}
           </DialogDescription>
         </DialogHeader>
@@ -96,7 +96,7 @@ export const AddSectionDialog: React.FC<AddSectionDialogProps> = ({
         <div className="p-6 space-y-6">
           {/* Section Name */}
           <div className="space-y-2">
-            <Label className="font-mono text-xs uppercase tracking-wider text-steel-grey">
+            <Label className="font-mono text-xs uppercase tracking-wider text-zinc-400">
               {t('builder.customSections.sectionNameLabel')}
             </Label>
             <Input
@@ -104,14 +104,14 @@ export const AddSectionDialog: React.FC<AddSectionDialogProps> = ({
               onChange={(e) => setDisplayName(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={t('builder.customSections.sectionNamePlaceholder')}
-              className="rounded-none border-black"
+              className="rounded-xl border-white/10 bg-zinc-950 text-zinc-200 placeholder:text-zinc-600 focus-visible:ring-emerald-500"
               autoFocus
             />
           </div>
 
           {/* Section Type */}
           <div className="space-y-3">
-            <Label className="font-mono text-xs uppercase tracking-wider text-steel-grey">
+            <Label className="font-mono text-xs uppercase tracking-wider text-zinc-400">
               {t('builder.customSections.sectionTypeLabel')}
             </Label>
             <div className="space-y-2">
@@ -120,30 +120,30 @@ export const AddSectionDialog: React.FC<AddSectionDialogProps> = ({
                   key={item.type}
                   type="button"
                   onClick={() => setSectionType(item.type)}
-                  className={`w-full p-4 border text-left transition-colors ${
+                  className={`w-full p-4 rounded-xl border text-left transition-colors ${
                     sectionType === item.type
-                      ? 'border-black bg-paper-tint shadow-sw-sm'
-                      : 'border-steel-grey hover:border-steel-grey'
+                      ? 'border-emerald-500/50 bg-emerald-500/10 shadow-sm'
+                      : 'border-white/10 bg-zinc-950/50 hover:bg-zinc-800'
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div
-                      className={`p-2 border ${
+                      className={`p-2 rounded-lg border ${
                         sectionType === item.type
-                          ? 'border-black bg-white'
-                          : 'border-steel-grey bg-paper-tint'
+                          ? 'border-emerald-500/30 bg-emerald-500/20 text-emerald-400'
+                          : 'border-white/5 bg-zinc-900 text-zinc-400'
                       }`}
                     >
                       {item.icon}
                     </div>
                     <div className="flex-1">
-                      <div className="font-sans font-medium text-sm">{item.label}</div>
-                      <div className="font-mono text-xs text-steel-grey mt-0.5">
+                      <div className={`font-sans font-medium text-sm ${sectionType === item.type ? 'text-zinc-100' : 'text-zinc-300'}`}>{item.label}</div>
+                      <div className="font-mono text-xs text-zinc-500 mt-0.5">
                         {item.description}
                       </div>
                     </div>
                     {sectionType === item.type && (
-                      <div className="w-4 h-4 border-2 border-black bg-black" />
+                      <div className="w-4 h-4 rounded-full border-2 border-emerald-500 bg-emerald-500" />
                     )}
                   </div>
                 </button>
@@ -152,13 +152,13 @@ export const AddSectionDialog: React.FC<AddSectionDialogProps> = ({
           </div>
         </div>
 
-        <DialogFooter className="p-4 bg-background border-t border-black flex-row justify-end gap-3">
+        <DialogFooter className="p-4 bg-zinc-900/50 border-t border-white/5 flex-row justify-end gap-3">
           <DialogClose asChild>
-            <Button variant="outline" className="rounded-none border-black">
+            <Button variant="outline" className="rounded-xl border-white/10 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
               {t('common.cancel')}
             </Button>
           </DialogClose>
-          <Button onClick={handleSubmit} disabled={!displayName.trim()} className="rounded-none">
+          <Button onClick={handleSubmit} disabled={!displayName.trim()} className="rounded-xl">
             <Plus className="w-4 h-4 mr-2" />
             {t('builder.addSection')}
           </Button>
@@ -186,7 +186,7 @@ export const AddSectionButton: React.FC<AddSectionButtonProps> = ({ onAdd }) => 
       <Button
         variant="outline"
         onClick={() => setOpen(true)}
-        className="w-full rounded-none border-dashed border-2 border-black py-6 hover:bg-paper-tint hover:border-solid transition-all"
+        className="w-full rounded-2xl border-dashed border-2 border-white/10 py-6 bg-zinc-900/20 text-zinc-400 hover:bg-zinc-900/60 hover:text-zinc-200 hover:border-white/20 transition-all shadow-none"
       >
         <Plus className="w-5 h-5 mr-2" />
         {t('builder.customSections.addCustomSectionButton')}

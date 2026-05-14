@@ -1,18 +1,18 @@
 <div align="center">
 
-[![Resume Matcher](assets/header.png)](https://www.resumematcher.fyi)
+[![Recro AI](assets/header.png)](https://www.recroai.fyi)
 
-# Resume Matcher
+# Recro AI
 
 [English](README.md) | **Español** | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/resume-matcher) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://resumematcher.fyi) ✦ [𝙷𝚘𝚠 𝚝𝚘 𝙸𝚗𝚜𝚝𝚊𝚕𝚕](https://resumematcher.fyi/docs/installation) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝚂𝚙𝚘𝚗𝚜𝚘𝚛](#sponsor-resume-matcher) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/srbhrai) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/resume-matcher/) ✦ [𝙲𝚛𝚎𝚊𝚝𝚘𝚛](https://srbhr.com)
+[𝙹𝚘𝚒𝚗 𝙳𝚒𝚜𝚌𝚘𝚛𝚍](https://dsc.gg/recro-ai) ✦ [𝚆𝚎𝚋𝚜𝚒𝚝𝚎](https://recroai.fyi) ✦ [𝙷𝚘𝚠 𝚝𝚘 𝙸𝚗𝚜𝚝𝚊𝚕𝚕](https://recroai.fyi/docs/installation) ✦ [𝙲𝚘𝚗𝚝𝚛𝚒𝚋𝚞𝚝𝚘𝚛𝚜](#contributors) ✦ [𝚂𝚙𝚘𝚗𝚜𝚘𝚛](#sponsor-recro-ai) ✦ [𝚃𝚠𝚒𝚝𝚝𝚎𝚛/𝚇](https://twitter.com/srbhrai) ✦ [𝙻𝚒𝚗𝚔𝚎𝚍𝙸𝚗](https://www.linkedin.com/company/recro-ai/) ✦ [𝙲𝚛𝚎𝚊𝚝𝚘𝚛](https://srbhr.com)
 
-**Deja de ser rechazado automáticamente por los bots ATS.** Resume Matcher es la plataforma impulsada por IA que aplica ingeniería inversa a los algoritmos de contratación para mostrarte exactamente cómo adaptar tu currículum. Obtén las palabras clave, el formato y los conocimientos que realmente te ayudarán a superar el primer filtro y llegar a manos humanas.
+**Deja de ser rechazado automáticamente por los bots ATS.** Recro AI es la plataforma impulsada por IA que aplica ingeniería inversa a los algoritmos de contratación para mostrarte exactamente cómo adaptar tu currículum. Obtén las palabras clave, el formato y los conocimientos que realmente te ayudarán a superar el primer filtro y llegar a manos humanas.
 
 Esperamos convertir esto en **el VS Code para crear currículums**.
 
-![Resume Matcher Demo](assets/Resume_Matcher_Demo_2.gif)
+![Recro AI Demo](assets/Resume_Matcher_Demo_2.gif)
 
 </div>
 
@@ -20,12 +20,12 @@ Esperamos convertir esto en **el VS Code para crear currículums**.
 
 <div align="center">
 
-![Stars](https://img.shields.io/github/stars/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
-![Apache 2.0](https://img.shields.io/github/license/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![Forks](https://img.shields.io/github/forks/srbhr/Resume-Matcher?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![version](https://img.shields.io/badge/Version-1.2%20Nightvision-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
+![Stars](https://img.shields.io/github/stars/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
+![Apache 2.0](https://img.shields.io/github/license/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![Forks](https://img.shields.io/github/forks/srbhr/Recro-AI?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8) ![version](https://img.shields.io/badge/Version-1.2%20Nightvision-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)
 
-[![Discord](https://img.shields.io/discord/1122069176962531400?labelColor=F0F0E8&logo=discord&logoColor=1d4ed8&style=for-the-badge&color=1d4ed8)](https://dsc.gg/resume-matcher) [![Website](https://img.shields.io/badge/website-Resume%20Matcher-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)](https://resumematcher.fyi) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Resume%20Matcher-FFF?labelColor=F0F0E8&logo=LinkedIn&style=for-the-badge&color=1d4ed8)](https://www.linkedin.com/company/resume-matcher/)
+[![Discord](https://img.shields.io/discord/1122069176962531400?labelColor=F0F0E8&logo=discord&logoColor=1d4ed8&style=for-the-badge&color=1d4ed8)](https://dsc.gg/recro-ai) [![Website](https://img.shields.io/badge/website-Resume%20Matcher-FFF?labelColor=F0F0E8&style=for-the-badge&color=1d4ed8)](https://recroai.fyi) [![LinkedIn](https://img.shields.io/badge/LinkedIn-Resume%20Matcher-FFF?labelColor=F0F0E8&logo=LinkedIn&style=for-the-badge&color=1d4ed8)](https://www.linkedin.com/company/recro-ai/)
 
-<a href="https://trendshift.io/repositories/565" target="_blank"><img src="https://trendshift.io/api/badge/repositories/565" alt="srbhr%2FResume-Matcher | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+<a href="https://trendshift.io/repositories/565" target="_blank"><img src="https://trendshift.io/api/badge/repositories/565" alt="srbhr%2FRecro-AI | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 ![Vercel OSS Program](https://vercel.com/oss/program-badge.svg)
 
@@ -33,11 +33,11 @@ Esperamos convertir esto en **el VS Code para crear currículums**.
 
 > \[!IMPORTANT]
 >
-> Este proyecto está en desarrollo activo. Se están añadiendo nuevas características continuamente y agradecemos las contribuciones de la comunidad. Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub o discutirlo en nuestro servidor de [Discord](https://dsc.gg/resume-matcher).
+> Este proyecto está en desarrollo activo. Se están añadiendo nuevas características continuamente y agradecemos las contribuciones de la comunidad. Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub o discutirlo en nuestro servidor de [Discord](https://dsc.gg/recro-ai).
 
 ## Primeros pasos
 
-Resume Matcher funciona creando un currículum maestro que puedes usar para adaptar cada postulación. Instrucciones de instalación aquí: [Cómo instalar](#how-to-install)
+Recro AI funciona creando un currículum maestro que puedes usar para adaptar cada postulación. Instrucciones de instalación aquí: [Cómo instalar](#how-to-install)
 
 ### Cómo funciona
 
@@ -50,15 +50,15 @@ Resume Matcher funciona creando un currículum maestro que puedes usar para adap
 
 ### Mantente conectado
 
-[![Discord](assets/resume_matcher_discord.png)](https://dsc.gg/resume-matcher)
+[![Discord](assets/resume_matcher_discord.png)](https://dsc.gg/recro-ai)
 
-Únete a nuestro [Discord](https://dsc.gg/resume-matcher) para discusiones, solicitudes de funcionalidades y soporte de la comunidad.
+Únete a nuestro [Discord](https://dsc.gg/recro-ai) para discusiones, solicitudes de funcionalidades y soporte de la comunidad.
 
-[![LinkedIn](assets/resume_matcher_linkedin.png)](https://www.linkedin.com/company/resume-matcher/)
+[![LinkedIn](assets/resume_matcher_linkedin.png)](https://www.linkedin.com/company/recro-ai/)
 
-Síguenos en [LinkedIn](https://www.linkedin.com/company/resume-matcher/) para actualizaciones.
+Síguenos en [LinkedIn](https://www.linkedin.com/company/recro-ai/) para actualizaciones.
 
-![Star Resume Matcher](assets/star_resume_matcher.png)
+![Star Recro AI](assets/star_resume_matcher.png)
 
 Dale una estrella al repositorio para apoyar el desarrollo y recibir notificaciones de nuevas versiones.
 
@@ -66,22 +66,22 @@ Dale una estrella al repositorio para apoyar el desarrollo y recibir notificacio
 
 ![sponsors](assets/sponsors.png)
 
-Estamos agradecidos a nuestros patrocinadores que ayudan a mantener este proyecto. Si Resume Matcher te resulta útil, considera [**apoyarnos**](https://github.com/sponsors/srbhr) para asegurar el desarrollo y las mejoras continuas.
+Estamos agradecidos a nuestros patrocinadores que ayudan a mantener este proyecto. Si Recro AI te resulta útil, considera [**apoyarnos**](https://github.com/sponsors/srbhr) para asegurar el desarrollo y las mejoras continuas.
 
 | Patrocinador | Descripción |
 |---------|-------------|
-| [APIDECK](https://apideck.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Una API para conectar tu aplicación con más de 200 plataformas SaaS (contabilidad, HRIS, CRM, almacenamiento de archivos). Crea integraciones una vez, no 50. 🌐 [apideck.com](https://apideck.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Vercel](https://vercel.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Resume Matcher es parte del programa Vercel OSS // Summer 2025 🌐 [vercel.com](https://vercel.com?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Cubic.dev](https://cubic.dev?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Cubic ofrece revisiones de PR para Resume Matcher 🌐 [cubic.dev](https://cubic.dev?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
-| [Kilo Code](https://kilo.ai?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) | Kilo Code proporciona revisiones de código de IA y créditos de codificación a Resume Matcher 🌐 [kilo.ai](https://kilo.ai?utm_source=resumematcher&utm_medium=github&utm_campaign=sponsors) |
+| [APIDECK](https://apideck.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Una API para conectar tu aplicación con más de 200 plataformas SaaS (contabilidad, HRIS, CRM, almacenamiento de archivos). Crea integraciones una vez, no 50. 🌐 [apideck.com](https://apideck.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Vercel](https://vercel.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Recro AI es parte del programa Vercel OSS // Summer 2025 🌐 [vercel.com](https://vercel.com?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Cubic.dev](https://cubic.dev?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Cubic ofrece revisiones de PR para Recro AI 🌐 [cubic.dev](https://cubic.dev?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
+| [Kilo Code](https://kilo.ai?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) | Kilo Code proporciona revisiones de código de IA y créditos de codificación a Recro AI 🌐 [kilo.ai](https://kilo.ai?utm_source=recroai&utm_medium=github&utm_campaign=sponsors) |
 
 <a id="support-the-development-by-donating"></a>
 
-## Patrocina Resume Matcher
+## Patrocina Recro AI
 
 ![donate](assets/supporting_resume_matcher.png)
 
-Por favor lee nuestra [Sponsorship Guide](https://resumematcher.fyi/docs/sponsoring) para detalles de cómo tu patrocinio ayuda al proyecto. Recibirás un agradecimiento especial en el ReadME y en nuestro sitio web.
+Por favor lee nuestra [Sponsorship Guide](https://recroai.fyi/docs/sponsoring) para detalles de cómo tu patrocinio ayuda al proyecto. Recibirás un agradecimiento especial en el ReadME y en nuestro sitio web.
 
 | Plataforma  | Enlace |
 |-----------|--------|
@@ -90,7 +90,7 @@ Por favor lee nuestra [Sponsorship Guide](https://resumematcher.fyi/docs/sponsor
 
 ## Nota del Creador
 
-Gracias por visitar Resume Matcher. Si quieres conectar, colaborar o simplemente saludar, ¡no dudes en contactarme!
+Gracias por visitar Recro AI. Si quieres conectar, colaborar o simplemente saludar, ¡no dudes en contactarme!
 ~ **Saurabh Rai** ✨
 
 Puedes seguirme en:
@@ -155,7 +155,7 @@ Exporta tu currículum adaptado y tu carta de presentación en PDF.
 
 ### Roadmap
 
-Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub o discutirlo en nuestro servidor de [Discord](https://dsc.gg/resume-matcher).
+Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub o discutirlo en nuestro servidor de [Discord](https://dsc.gg/recro-ai).
 
 - Resaltado visual de palabras clave
 - AI Canvas para crear contenido de currículum impactante y basado en métricas
@@ -165,7 +165,7 @@ Si tienes alguna sugerencia o solicitud de características, no dudes en abrir u
 
 ## Cómo instalar
 
-![Instalación](assets/how_to_install_resumematcher.png)
+![Instalación](assets/how_to_install_recroai.png)
 
 Para instrucciones detalladas de configuración, consulta **[SETUP.es.md](SETUP.es.md)**. También está disponible en [English](SETUP.md), [简体中文](SETUP.zh-CN.md) y [日本語](SETUP.ja.md).
 
@@ -183,8 +183,8 @@ La forma más rápida (MacOS, WSL y Ubuntu):
 
 ```bash
 # Clona el repositorio
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 
 # Backend (Terminal 1)
 cd apps/backend
@@ -214,9 +214,9 @@ Abre **<http://localhost:3000>** y configura tu proveedor de IA en Settings.
 ### Despliegue con Docker
 
 ```bash
-docker pull srbhr/resume-matcher:latest
+docker pull srbhr/recro-ai:latest
 
-docker run srbhr/resume-matcher:latest
+docker run srbhr/recro-ai:latest
 ```
 
 <!-- Nota: La documentación de Docker está pendiente. Por ahora, usa docker-compose.yml como referencia -->
@@ -237,9 +237,9 @@ docker run srbhr/resume-matcher:latest
 
 ![Cómo contribuir](assets/how_to_contribute.png)
 
-¡Damos la bienvenida a las contribuciones de todos! Ya seas un desarrollador, diseñador o simplemente alguien que quiere ayudar. Todos los colaboradores están listados en la [página "Acerca de"](https://resumematcher.fyi/about) en nuestro sitio web y en el Readme de GitHub.
+¡Damos la bienvenida a las contribuciones de todos! Ya seas un desarrollador, diseñador o simplemente alguien que quiere ayudar. Todos los colaboradores están listados en la [página "Acerca de"](https://recroai.fyi/about) en nuestro sitio web y en el Readme de GitHub.
 
-Echa un vistazo al roadmap si te gustaría trabajar en las características que están planeadas para el futuro. Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub y discutirlo en nuestro servidor de [Discord](https://dsc.gg/resume-matcher).
+Echa un vistazo al roadmap si te gustaría trabajar en las características que están planeadas para el futuro. Si tienes alguna sugerencia o solicitud de características, no dudes en abrir un *issue* en GitHub y discutirlo en nuestro servidor de [Discord](https://dsc.gg/recro-ai).
 
 <a id="contributors"></a>
 
@@ -247,18 +247,18 @@ Echa un vistazo al roadmap si te gustaría trabajar en las características que 
 
 ![Colaboradores](assets/contributors.png)
 
-<a href="https://github.com/srbhr/Resume-Matcher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=srbhr/Resume-Matcher" />
+<a href="https://github.com/srbhr/Recro-AI/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=srbhr/Recro-AI" />
 </a>
 
 <details>
   <summary><kbd>Historial de Estrellas</kbd></summary>
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=srbhr/resume-matcher&theme=dark&type=Date">
-    <img width="100%" src="https://api.star-history.com/svg?repos=srbhr/resume-matcher&theme=dark&type=Date">
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=srbhr/recro-ai&theme=dark&type=Date">
+    <img width="100%" src="https://api.star-history.com/svg?repos=srbhr/recro-ai&theme=dark&type=Date">
   </picture>
 </details>
 
-## Resume Matcher es parte del [Vercel Open Source Program](https://vercel.com/oss)
+## Recro AI es parte del [Vercel Open Source Program](https://vercel.com/oss)
 
 ![Vercel OSS Program](https://vercel.com/oss/program-badge.svg)

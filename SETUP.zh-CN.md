@@ -1,8 +1,8 @@
-# Resume Matcher 安装与配置指南
+# Recro AI 安装与配置指南
 
 [English](SETUP.md) | [Español](SETUP.es.md) | [**简体中文**](SETUP.zh-CN.md) | [日本語](SETUP.ja.md)
 
-欢迎！本指南将带你在本地完成 Resume Matcher 的安装与配置。无论你是想参与开发，还是只想在本机运行应用，都可以按本文档完成上手。
+欢迎！本指南将带你在本地完成 Recro AI 的安装与配置。无论你是想参与开发，还是只想在本机运行应用，都可以按本文档完成上手。
 
 ---
 
@@ -41,7 +41,7 @@
 
 ### 安装 uv（Python 包管理器）
 
-Resume Matcher 使用 `uv` 来实现更快、更稳定的 Python 依赖管理。可通过以下方式安装：
+Recro AI 使用 `uv` 来实现更快、更稳定的 Python 依赖管理。可通过以下方式安装：
 
 ```bash
 # macOS/Linux
@@ -63,8 +63,8 @@ pip install uv
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 
 # 2. 启动后端（终端 1）
 cd apps/backend
@@ -93,8 +93,8 @@ npm run dev                  # 启动开发服务器
 先把代码拉到本机：
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/srbhr/Recro-AI.git
+cd Recro-AI
 ```
 
 <a id="2-backend-setup"></a>
@@ -199,14 +199,14 @@ npm run dev
 - Local:        http://localhost:3000
 ```
 
-浏览器打开 **<http://localhost:3000>**，你应该能看到 Resume Matcher 的界面。
+浏览器打开 **<http://localhost:3000>**，你应该能看到 Recro AI 的界面。
 
 ---
 
 <a id="configuring-your-ai-provider"></a>
 ## 配置 AI 提供商
 
-Resume Matcher 支持多种 AI 提供商。你可以在应用的 Settings 页面中配置，也可以直接编辑后端的 `.env` 文件。
+Recro AI 支持多种 AI 提供商。你可以在应用的 Settings 页面中配置，也可以直接编辑后端的 `.env` 文件。
 
 <a id="option-a-cloud-providers"></a>
 ### 选项 A：云端提供商
@@ -269,7 +269,7 @@ ollama serve
 <a id="docker-deployment"></a>
 ## Docker 部署
 
-如果你更喜欢容器化部署，Resume Matcher 已提供 Docker 支持。
+如果你更喜欢容器化部署，Recro AI 已提供 Docker 支持。
 
 ### 使用 Docker Compose（推荐）
 
@@ -371,7 +371,7 @@ npm run dev -- -p 3001
 
 ### 数据库管理
 
-Resume Matcher 使用 TinyDB（JSON 文件存储）。数据位于 `apps/backend/data/`：
+Recro AI 使用 TinyDB（JSON 文件存储）。数据位于 `apps/backend/data/`：
 
 ```bash
 # 查看数据库文件
@@ -453,7 +453,7 @@ CORS_ORIGINS=["http://localhost:3001", "http://127.0.0.1:3001"]
 ## 项目结构概览
 
 ```text
-Resume-Matcher/
+Recro-AI/
 ├─ apps/
 │  ├─ backend/                 # Python FastAPI backend
 │  │  ├─ app/
@@ -487,8 +487,8 @@ Resume-Matcher/
 
 如果遇到问题，可以从以下渠道获得支持：
 
-- **Discord 社区：** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - 提问与讨论都很活跃
-- **GitHub Issues：** [提交 Issue](https://github.com/srbhr/Resume-Matcher/issues) 反馈 bug 或提出需求
+- **Discord 社区：** [dsc.gg/recro-ai](https://dsc.gg/recro-ai) - 提问与讨论都很活跃
+- **GitHub Issues：** [提交 Issue](https://github.com/srbhr/Recro-AI/issues) 反馈 bug 或提出需求
 - **项目文档：** 查看 [docs/agent/](docs/agent/) 获取更详细的指南
 
 ### 推荐文档
@@ -501,5 +501,5 @@ Resume-Matcher/
 
 ---
 
-祝你简历制作顺利！如果 Resume Matcher 对你有帮助，欢迎 [给仓库点个 Star](https://github.com/srbhr/Resume-Matcher)，以及 [加入我们的 Discord](https://dsc.gg/resume-matcher)。
+祝你简历制作顺利！如果 Recro AI 对你有帮助，欢迎 [给仓库点个 Star](https://github.com/srbhr/Recro-AI)，以及 [加入我们的 Discord](https://dsc.gg/recro-ai)。
 

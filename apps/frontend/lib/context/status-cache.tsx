@@ -103,7 +103,7 @@ export function StatusCacheProvider({ children }: { children: React.ReactNode })
           ...prev.status,
           database_stats: {
             ...prev.status.database_stats,
-            total_resumes: prev.status.database_stats.total_resumes + 1,
+            total_resumes: (prev.status.database_stats.total_resumes || 0) + 1,
           },
         },
       };
@@ -119,7 +119,7 @@ export function StatusCacheProvider({ children }: { children: React.ReactNode })
           ...prev.status,
           database_stats: {
             ...prev.status.database_stats,
-            total_resumes: Math.max(0, prev.status.database_stats.total_resumes - 1),
+            total_resumes: Math.max(0, (prev.status.database_stats.total_resumes || 0) - 1),
           },
         },
       };
@@ -135,7 +135,7 @@ export function StatusCacheProvider({ children }: { children: React.ReactNode })
           ...prev.status,
           database_stats: {
             ...prev.status.database_stats,
-            total_jobs: prev.status.database_stats.total_jobs + 1,
+            total_jobs: (prev.status.database_stats.total_jobs || 0) + 1,
           },
         },
       };
@@ -151,7 +151,7 @@ export function StatusCacheProvider({ children }: { children: React.ReactNode })
           ...prev.status,
           database_stats: {
             ...prev.status.database_stats,
-            total_improvements: prev.status.database_stats.total_improvements + 1,
+            total_improvements: (prev.status.database_stats.total_improvements || 0) + 1,
           },
         },
       };

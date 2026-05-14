@@ -113,22 +113,22 @@ export function EnrichmentModal({ resumeId, isOpen, onClose, onComplete }: Enric
       onCancel={handleCancel}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
       {/* Modal container - 80% viewport with padding */}
       <div className="absolute inset-0 flex items-center justify-center p-5 sm:p-10">
-        <div className="relative w-full h-full max-w-[1200px] bg-white border-2 border-black shadow-sw-lg flex flex-col overflow-hidden">
+        <div className="relative w-full h-full max-w-[1200px] bg-zinc-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/50 flex flex-col overflow-hidden rounded-3xl">
           {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b-2 border-black bg-paper-tint">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-zinc-900/50">
             <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5" />
-              <h1 className="font-mono text-lg font-bold uppercase tracking-wider">
+              <Sparkles className="w-5 h-5 text-emerald-400" />
+              <h1 className="text-lg font-semibold tracking-tight text-zinc-100">
                 {t('enrichment.title')}
               </h1>
             </div>
             {/* Only show close button in non-loading states */}
             {!['analyzing', 'generating', 'applying'].includes(state.step) && (
-              <button onClick={handleClose} className="p-1 hover:bg-paper-tint transition-colors">
+              <button onClick={handleClose} className="p-2 rounded-xl text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors">
                 <XIcon className="w-5 h-5" />
                 <span className="sr-only">{t('common.close')}</span>
               </button>

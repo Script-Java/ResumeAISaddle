@@ -61,12 +61,12 @@ export function Dropdown({
   return (
     <div className={`space-y-1 ${className}`} ref={containerRef}>
       {label && (
-        <label className="font-mono text-xs font-bold uppercase tracking-wider text-ink-soft block">
+        <label className="text-sm font-semibold uppercase tracking-wider text-zinc-300 block">
           {label}
         </label>
       )}
 
-      {description && <p className="text-sm text-ink-soft">{description}</p>}
+      {description && <p className="text-sm text-zinc-500 font-medium">{description}</p>}
 
       <div className="relative">
         {/* Trigger Button.
@@ -83,20 +83,20 @@ export function Dropdown({
           aria-expanded={isOpen}
           aria-controls={isOpen ? menuId : undefined}
           aria-label={label}
-          className="w-full flex items-center justify-between border border-black bg-white px-4 py-3 font-mono text-sm transition-all duration-150 ease-out shadow-sw-sm hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px] disabled:opacity-50 disabled:cursor-not-allowed rounded-none"
+          className="w-full flex items-center justify-between border border-white/10 bg-zinc-950/50 px-4 py-3 text-sm transition-colors duration-150 ease-out hover:bg-zinc-800/50 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-zinc-200"
         >
           <div className="flex-1 text-left min-w-0">
             {selectedOption ? (
               <div>
-                <div className="font-bold text-black truncate">{selectedOption.label}</div>
+                <div className="font-medium text-zinc-100 truncate">{selectedOption.label}</div>
                 {selectedOption.description && (
-                  <div className="text-xs text-steel-grey mt-1 font-normal truncate">
+                  <div className="text-xs text-zinc-500 mt-1 font-medium truncate">
                     {selectedOption.description}
                   </div>
                 )}
               </div>
             ) : (
-              <span className="text-steel-grey">{t('common.selectOption')}</span>
+              <span className="text-zinc-500 font-medium">{t('common.selectOption')}</span>
             )}
           </div>
           <ChevronDown
@@ -118,7 +118,7 @@ export function Dropdown({
             id={menuId}
             role="menu"
             aria-label={label}
-            className="absolute top-full left-0 right-0 mt-1 z-50 border border-black bg-white shadow-sw-default rounded-none"
+            className="absolute top-full left-0 right-0 mt-2 z-50 border border-white/10 bg-zinc-900 shadow-2xl shadow-black/50 rounded-xl overflow-hidden"
           >
             <div className="max-h-64 overflow-y-auto">
               {options.map((option, index) => (
@@ -127,20 +127,20 @@ export function Dropdown({
                     role="menuitemradio"
                     aria-checked={option.id === value}
                     onClick={() => handleSelect(option.id)}
-                    className={`w-full px-4 py-3 text-left font-mono transition-colors duration-150 border border-black ${
+                    className={`w-full px-4 py-3 text-left transition-colors duration-150 border-b border-white/5 last:border-0 ${
                       option.id === value
-                        ? 'bg-green-700 text-white'
-                        : 'bg-white text-black hover:bg-paper-tint'
-                    } ${index > 0 ? '-mt-[1px]' : ''} active:bg-paper-tint`}
+                        ? 'bg-zinc-800 text-zinc-100'
+                        : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800/80 hover:text-zinc-200'
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1">
-                        <div className="font-bold text-sm">{option.label}</div>
+                        <div className="font-medium text-sm">{option.label}</div>
                         {option.description && (
-                          <div className="text-xs mt-1 opacity-80">{option.description}</div>
+                          <div className="text-xs mt-1 text-zinc-500 font-medium">{option.description}</div>
                         )}
                       </div>
-                      {option.id === value && <div className="text-lg font-bold mt-0.5">✓</div>}
+                      {option.id === value && <div className="text-lg font-bold mt-0.5 text-emerald-500">✓</div>}
                     </div>
                   </button>
                 </React.Fragment>
