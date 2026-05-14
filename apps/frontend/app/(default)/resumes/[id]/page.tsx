@@ -192,13 +192,26 @@ export default function ResumeViewerPage() {
       setShowDownloadSuccessDialog(true);
     } catch (err) {
       console.error('Failed to download resume:', err);
-      if (err instanceof TypeError && err.message.includes('Failed to fetch')) {
+      const message = err instanceof Error ? err.message : String(err);
+
+      if (err instanceof TypeError && message.includes('Failed to fetch')) {
+        // Network error: backend unreachable — open print URL directly as fallback
         const fallbackUrl = getResumePdfUrl(resumeId, undefined, uiLanguage);
         const didOpen = openUrlInNewTab(fallbackUrl);
         if (!didOpen) {
           toast.error(t('common.popupBlocked', { url: fallbackUrl }), { duration: 6000 });
         }
         return;
+      }
+
+      if (message.includes('Playwright') || message.includes('Chrome') || message.includes('browser')) {
+        toast.error('PDF renderer not ready. Please restart the backend server and try again.', { duration: 6000 });
+      } else if (message.includes('503') || message.includes('Service Unavailable')) {
+        toast.error('PDF service temporarily unavailable. Please try again in a moment.', { duration: 5000 });
+      } else if (message.includes('404') || message.includes('not found')) {
+        toast.error('Resume not found. Please refresh the page and try again.', { duration: 5000 });
+      } else {
+        toast.error(`Failed to download resume. Please try again.`, { duration: 5000 });
       }
     } finally {
       setIsDownloading(false);
