@@ -12,6 +12,7 @@ import {
 import { translate } from '@/lib/i18n/server';
 import { resolveLocale } from '@/lib/i18n/locale';
 import { withLocalizedDefaultSections } from '@/lib/utils/section-helpers';
+import { createClient } from '@/utils/supabase/server';
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -76,10 +77,6 @@ function parseBoolean(value: string | undefined, defaultValue: boolean): boolean
 }
 
 async function fetchResumeData(id: string): Promise<ResumeData> {
-  const { cookies } = await import('next/headers');
-  const { createClient } = await import('@/utils/supabase/server');
-  
-  const cookieStore = await cookies();
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token || '';

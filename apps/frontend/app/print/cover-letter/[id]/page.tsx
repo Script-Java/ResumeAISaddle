@@ -7,6 +7,7 @@
 
 import { translate } from '@/lib/i18n/server';
 import { resolveLocale } from '@/lib/i18n/locale';
+import { createClient } from '@/utils/supabase/server';
 
 const PAGE_DIMENSIONS = {
   A4: { width: 210, height: 297 },
@@ -37,10 +38,6 @@ interface CoverLetterData {
 }
 
 async function fetchCoverLetterData(resumeId: string): Promise<CoverLetterData> {
-  const { cookies } = await import('next/headers');
-  const { createClient } = await import('@/utils/supabase/server');
-  
-  const cookieStore = await cookies();
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
   const token = session?.access_token || '';
