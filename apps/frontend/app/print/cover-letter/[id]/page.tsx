@@ -1,13 +1,10 @@
-/**
- * Cover Letter Print Page
- *
- * This page renders a cover letter for PDF generation.
- * Uses the same API fetch pattern as the resume print page.
- */
+'use client';
 
-import { translate } from '@/lib/i18n/server';
+import React, { useEffect, useState } from 'react';
+import { fetchResume } from '@/lib/api/resume';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useTranslations } from '@/lib/i18n';
 import { resolveLocale } from '@/lib/i18n/locale';
-import { createClient } from '@/utils/supabase/server';
 
 const PAGE_DIMENSIONS = {
   A4: { width: 210, height: 297 },
@@ -15,14 +12,6 @@ const PAGE_DIMENSIONS = {
 } as const;
 
 type PageSize = 'A4' | 'LETTER';
-
-type PageProps = {
-  params: Promise<{ id: string }>;
-  searchParams?: Promise<{
-    pageSize?: string;
-    lang?: string;
-  }>;
-};
 
 interface PersonalInfo {
   name?: string;
@@ -32,70 +21,69 @@ interface PersonalInfo {
   linkedin?: string;
 }
 
-interface CoverLetterData {
-  coverLetter: string;
-  personalInfo: PersonalInfo;
-}
-
-async function fetchCoverLetterData(resumeId: string): Promise<CoverLetterData> {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const token = session?.access_token || '';
-
-  const res = await fetch(`/api/v1/resumes?resume_id=${encodeURIComponent(resumeId)}`, {
-    cache: 'no-store',
-    headers: {
-      ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-    }
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to load resume (status ${res.status}).`);
-  }
-  const payload = (await res.json()) as {
-    data: {
-      cover_letter?: string;
-      processed_resume?: {
-        personalInfo?: PersonalInfo;
-      };
-    };
-  };
-
-  return {
-    coverLetter: payload.data.cover_letter || '',
-    personalInfo: payload.data.processed_resume?.personalInfo || {},
-  };
-}
-
-function parsePageSize(value: string | undefined): PageSize {
+function parsePageSize(value: string | null): PageSize {
   if (value === 'A4' || value === 'LETTER') {
     return value;
   }
   return 'A4';
 }
 
-export default async function PrintCoverLetterPage({ params, searchParams }: PageProps) {
-  const resolvedParams = await params;
-  const resolvedSearchParams = searchParams ? await searchParams : undefined;
+export default function PrintCoverLetterPage() {
+  const { t, locale } = useTranslations();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const [coverLetter, setCoverLetter] = useState<string | null>(null);
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const pageSize = parsePageSize(resolvedSearchParams?.pageSize);
+  const id = params?.id as string;
+  const pageSize = parsePageSize(searchParams?.get('pageSize') ?? null);
+  const resolvedLocale = resolveLocale(searchParams?.get('lang') || locale);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchResume(id);
+        if (cancelled) return;
+        setCoverLetter(data.cover_letter || null);
+        setPersonalInfo((data.processed_resume as { personalInfo?: PersonalInfo })?.personalInfo || {});
+      } catch (err) {
+        if (!cancelled) setError('Failed to load cover letter');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    loadData();
+    return () => { cancelled = true; };
+  }, [id]);
+
   const pageDims = PAGE_DIMENSIONS[pageSize];
-  const locale = resolveLocale(resolvedSearchParams?.lang);
-
-  // Fetch cover letter data from API (same pattern as resume)
-  const { coverLetter, personalInfo } = await fetchCoverLetterData(resolvedParams.id);
-
-  // Standard cover letter margins
   const margins = { top: 25, right: 25, bottom: 25, left: 25 };
-
-  // Get today's date formatted
-  const today = new Date().toLocaleDateString(locale, {
+  const today = new Date().toLocaleDateString(resolvedLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
-  const nameFallback = translate(locale, 'resume.defaults.name');
+  const nameFallback = t('resume.defaults.name');
 
-  // Split cover letter into paragraphs
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-white text-zinc-500">Loading...</div>;
+  }
+
+  if (error || !coverLetter) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-red-500">{error || 'No cover letter available'}</p>
+      </div>
+    );
+  }
+
   const paragraphs = coverLetter
     .split(/\n\n+/)
     .flatMap((p) => p.split('\n'))
@@ -114,7 +102,6 @@ export default async function PrintCoverLetterPage({ params, searchParams }: Pag
         color: '#000000',
       }}
     >
-      {/* Header - Personal Info */}
       <header
         style={{
           marginBottom: '8mm',
@@ -150,7 +137,6 @@ export default async function PrintCoverLetterPage({ params, searchParams }: Pag
         </div>
       </header>
 
-      {/* Date */}
       <div
         style={{
           marginBottom: '8mm',
@@ -162,7 +148,6 @@ export default async function PrintCoverLetterPage({ params, searchParams }: Pag
         {today}
       </div>
 
-      {/* Body */}
       <div style={{ lineHeight: '1.6' }}>
         {paragraphs.length > 0 ? (
           paragraphs.map((para, idx) => (
@@ -179,7 +164,7 @@ export default async function PrintCoverLetterPage({ params, searchParams }: Pag
           ))
         ) : (
           <p style={{ fontSize: '11pt', color: '#999' }}>
-            {translate(locale, 'coverLetter.print.emptyContent')}
+            {t('coverLetter.print.emptyContent')}
           </p>
         )}
       </div>
